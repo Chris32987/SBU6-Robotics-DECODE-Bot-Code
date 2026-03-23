@@ -18,7 +18,13 @@ public class Shooter implements Subsystem {
             new MotorEx("flywheelMotor2").reversed().floatMode()
     );
     private final InterpLUT velocityLUT = new InterpLUT(
-            Arrays.asList(0),
-            Arrays.asList(0)
+            Arrays.asList(40, 50, 55, 70, 65, 70, 80, 90),
+            Arrays.asList(1250.0, 1250.0, 1350.0, 1400.0, 1450.0, 1450.0, 1470.0, 1500.0)
     ).createLUT();
+
+    private final InterpLUT hoodLUT = new InterpLUT(
+            Arrays.asList(40, 50, 55, 70, 65, 70, 80, 90),
+            Arrays.asList(0.32, 0.30, 0.24, 0.20, 0.34, 0.20, 0.26, 0.18)
+    ).createLUT();
+
 }
