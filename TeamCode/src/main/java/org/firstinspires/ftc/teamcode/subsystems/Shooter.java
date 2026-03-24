@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.util.InterpLUT;
 import java.util.Arrays;
 
 import dev.nextftc.control.ControlSystem;
+import dev.nextftc.control.KineticState;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
@@ -59,5 +60,7 @@ public class Shooter implements Subsystem {
         HoodServoRight.setPosition(hoodLUT.get(distance));
         HoodServoLeft.setPosition(1 - hoodLUT.get(distance));
 
+        controller.setGoal(new KineticState(0, velocityLUT.get(distance), 0));
 
+        flywheelMotors.setPower(!spinFlywheel ? 0 : controller.calculate(flywheelMotors.getState()));
 }}
