@@ -14,6 +14,7 @@ public class Intake implements Subsystem {
     private final ServoEx GateServo = new ServoEx("GateServo");
     public Command intakeSpin = new SetPower(IntakeMotor,1).requires(IntakeMotor);
     public Command intakeOff = new SetPower(IntakeMotor,0).requires(IntakeMotor);
+    public Command intakeReverse = new SetPower(IntakeMotor,-1).requires(IntakeMotor);
     public Command GateOpen = new SetPosition(GateServo,0.65);
     public Command GateClose = new SetPosition(GateServo,1);
 }
