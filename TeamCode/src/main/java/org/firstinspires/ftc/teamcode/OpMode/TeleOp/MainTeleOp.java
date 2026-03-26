@@ -70,7 +70,9 @@ public class MainTeleOp extends NextFTCOpMode {
 
 
     }
-    @Override public void onUpdate() { }
+    @Override public void onUpdate() {
+        telemetry.update(); // LOOK HERE
+    }
     @Override public void onStop() { }
 
 

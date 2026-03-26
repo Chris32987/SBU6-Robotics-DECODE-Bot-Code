@@ -29,7 +29,7 @@ public class Turret implements Subsystem {
         double AngleRad = Math.atan2(Math.sin(rawDelta), Math.cos(rawDelta));
 
         double CalcGoalTicks = (AngleRad / (2 * Math.PI)) * 145.1 * (97.0/18.0);
-        return Math.max(-100, Math.min(CalcGoalTicks, 100));
+        return Math.max(-10, Math.min(CalcGoalTicks, 10));
     }
     public Command TrackingOn = new InstantCommand(() -> EnableTracking = true);
     public Command TrackingOff = new InstantCommand(() -> EnableTracking = false);
