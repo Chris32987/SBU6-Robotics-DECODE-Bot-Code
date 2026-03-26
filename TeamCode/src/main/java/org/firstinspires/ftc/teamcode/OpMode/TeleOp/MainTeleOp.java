@@ -30,12 +30,13 @@ public class MainTeleOp extends NextFTCOpMode {
         Gamepads.gamepad1().leftTrigger().greaterThan(0.05)
                 .whenBecomesTrue(Intake.INSTANCE.intakeSpin)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
-        Gamepads.gamepad1().leftBumper()
+        Gamepads.gamepad1().dpadDown()
                 .whenBecomesTrue(Intake.INSTANCE.intakeReverse)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
         //Gamepads.gamepad1().rightTrigger().greaterThan(0.05)
                // .whenBecomesTrue(Shooter.INSTANCE.FlywheelOn)
                // .whenBecomesFalse(Shooter.INSTANCE.FlywheelOff);
+
 
     }
     @Override public void onUpdate() { }
