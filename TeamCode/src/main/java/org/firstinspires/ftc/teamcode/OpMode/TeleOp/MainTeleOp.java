@@ -26,7 +26,7 @@ public class MainTeleOp extends NextFTCOpMode {
                 BindingsComponent.INSTANCE,
                 new SubsystemComponent(Intake.INSTANCE),
                 new SubsystemComponent(Shooter.INSTANCE),
-                new PedroComponent(Constants::createFollower),
+                new PedroComponent(Constants::createFollower)
         );
 
     }
