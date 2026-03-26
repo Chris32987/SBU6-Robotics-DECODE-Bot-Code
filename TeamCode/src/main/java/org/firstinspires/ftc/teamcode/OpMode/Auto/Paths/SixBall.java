@@ -10,8 +10,13 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
+import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
+import dev.nextftc.core.commands.groups.ParallelGroup;
+import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
+import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
@@ -60,6 +65,37 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
                 .addPath(new BezierLine(MiddleSpikePose, EndScorePose))
                 .setTangentHeadingInterpolation().setReversed()
                 .build();
+    }
+
+    private Command shootArtifacts() {
+        return new SequentialGroup(
+                new SequentialGroup(
+                        Intake.INSTANCE.GateOpen,
+                        Intake.INSTANCE.intakeSpin,
+                        new Delay(ShootTime)
+                ),
+                new ParallelGroup(
+                        Intake.INSTANCE.GateClose,
+                        Intake.INSTANCE.intakeOff
+                )
+        );
+    }
+
+    private Command autonomousRoutine() {
+        return new SequentialGroup(
+                new ParallelGroup( //drives to first point while spinning flywheel and turning on tracking
+                        new FollowPath(ScorePreload),
+                        Shooter.INSTANCE.FlywheelOn,
+                        //Turret.INSTANCE.enableTracking
+                ),
+                        shootArtifacts() ,
+
+                new FollowPath(IntakeMiddleSpike)
+
+
+
+
+                );
     }
 
 
