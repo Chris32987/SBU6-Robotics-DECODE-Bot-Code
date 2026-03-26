@@ -37,7 +37,7 @@ public class Turret implements Subsystem {
         return new InstantCommand(() -> TurretMotor.setCurrentPosition(pos));
     }
     ControlSystem controller = ControlSystem.builder()
-            .posPid(0, 0, 0)
+            .posPid(0.030, 0, 0)
             .build();
 
     @Override
