@@ -16,7 +16,7 @@ import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-@TeleOp(name = "MainTeleOp", group = "TeleOp")
+@TeleOp(name = "Main TeleOp")
 public class MainTeleOp extends NextFTCOpMode {
     public MainTeleOp() {
         addComponents(
