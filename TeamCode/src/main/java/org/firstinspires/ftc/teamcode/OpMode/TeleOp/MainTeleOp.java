@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.OpMode.TeleOp;
 
-//import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.Poses;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.Turret;
 //import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -11,6 +12,7 @@ import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
 //import dev.nextftc.extensions.pedro.PedroComponent;
+import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.extensions.pedro.PedroDriverControlled;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
@@ -22,9 +24,9 @@ public class MainTeleOp extends NextFTCOpMode {
         addComponents(
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE,
-                new SubsystemComponent(Intake.INSTANCE)
-                //new SubsystemComponent(Shooter.INSTANCE)
-                //new PedroComponent(Constants::createFollower)
+                new SubsystemComponent(Intake.INSTANCE),
+                new SubsystemComponent(Shooter.INSTANCE),
+                new PedroComponent(Constants::createFollower),
         );
 
     }
@@ -56,9 +58,15 @@ public class MainTeleOp extends NextFTCOpMode {
         Gamepads.gamepad1().dpadDown()
                 .whenBecomesTrue(Intake.INSTANCE.intakeReverse)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
-        //Gamepads.gamepad1().rightTrigger().greaterThan(0.05)
-               // .whenBecomesTrue(Shooter.INSTANCE.FlywheelOn)
-               // .whenBecomesFalse(Shooter.INSTANCE.FlywheelOff);
+        Gamepads.gamepad1().rightTrigger().greaterThan(0.05)
+                .whenBecomesTrue(Shooter.INSTANCE.FlywheelOn)
+                .whenBecomesFalse(Shooter.INSTANCE.FlywheelOff);
+        Gamepads.gamepad1().triangle()
+                .toggleOnBecomesTrue()
+                .whenBecomesTrue(Turret.INSTANCE.TrackingOn)
+                .whenBecomesFalse(Turret.INSTANCE.TrackingOff);
+
+
 
 
 
