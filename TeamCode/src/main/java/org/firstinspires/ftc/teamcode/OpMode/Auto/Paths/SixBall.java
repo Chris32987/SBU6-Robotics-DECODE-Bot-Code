@@ -24,6 +24,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 public abstract class SixBall extends NextFTCOpMode { // constant over every auto
     protected final Poses.AllianceColor alliance;
     private final double ShootTime = 0.8; //seconds
+
     public SixBall(Poses.AllianceColor alliance) {
         addComponents(
 
@@ -35,11 +36,11 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
         this.alliance = alliance;
     }
 
-    private Pose StartPose = new Pose(15,119.2, Math.toRadians(324)); //make poses for every point
-    private Pose ScorePose = new Pose(50.4,84.2, Math.toRadians(270));
-    private Pose MiddleSpikePose = new Pose(15.2,60, Math.toRadians(180));
-    private Pose MiddleSpikeControl = new Pose(58.8,57.7);
-    private Pose EndScorePose = new Pose(62.8,98);
+    private Pose StartPose = new Pose(15, 119.2, Math.toRadians(324)); //make poses for every point
+    private Pose ScorePose = new Pose(50.4, 84.2, Math.toRadians(270));
+    private Pose MiddleSpikePose = new Pose(15.2, 60, Math.toRadians(180));
+    private Pose MiddleSpikeControl = new Pose(58.8, 57.7);
+    private Pose EndScorePose = new Pose(62.8, 98);
 
     private void InitPoses() {
         if (alliance == Poses.AllianceColor.RED) {
@@ -52,6 +53,7 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
     }
 
     private PathChain ScorePreload, IntakeMiddleSpike, ScoreMiddleSpike; //actually making paths
+
     private void BuildPaths() {
         ScorePreload = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierLine(StartPose, ScorePose))
@@ -67,7 +69,7 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
                 .build();
     }
 
-    private Command shootArtifacts() {
+    private Command ShootArtifacts() {
         return new SequentialGroup(
                 new SequentialGroup(
                         Intake.INSTANCE.GateOpen,
@@ -88,15 +90,27 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
                         Shooter.INSTANCE.FlywheelOn,
                         //Turret.INSTANCE.enableTracking
                 ),
-                        shootArtifacts() ,
+                ShootArtifacts(),
+                Shooter.INSTANCE.FlywheelOff
 
-                new FollowPath(IntakeMiddleSpike)
+                //intake middle spike
+                Intake.INSTANCE.intakeSpin,
+                new FollowPath(IntakeMiddleSpike),
 
+                //scoring middle spike
+                Shooter.INSTANCE.FlywheelOn,
+                new FollowPath(ScoreMiddleSpike),
 
+                ShootArtifacts()
 
-
-                );
+        );
+    }
+    @Override
+    public void onInit() {
+        Poses.SetAlliance(alliance);
+        InitPoses();
+        BuildPaths();
+        PedroComponent.follower().setStartingPose(StartPose);
+    }
     }
 
-
-}
