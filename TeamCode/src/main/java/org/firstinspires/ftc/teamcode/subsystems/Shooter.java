@@ -43,7 +43,7 @@ public class Shooter implements Subsystem {
     private boolean spinFlywheel = false;
 
 
-            ControlSystem controller = ControlSystem.builder()
+    ControlSystem controller = ControlSystem.builder()
             .velPid(0, 0, 0)
             .basicFF(0, 0, 0)
             .build();

@@ -87,11 +87,11 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
         return new SequentialGroup(
                 new ParallelGroup( //drives to first point while spinning flywheel and turning on tracking
                         new FollowPath(ScorePreload),
-                        Shooter.INSTANCE.FlywheelOn,
+                        Shooter.INSTANCE.FlywheelOn
                         //Turret.INSTANCE.enableTracking
                 ),
                 ShootArtifacts(),
-                Shooter.INSTANCE.FlywheelOff
+                Shooter.INSTANCE.FlywheelOff,
 
                 //intake middle spike
                 Intake.INSTANCE.intakeSpin,
