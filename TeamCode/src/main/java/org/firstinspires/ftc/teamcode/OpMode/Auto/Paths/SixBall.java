@@ -10,8 +10,13 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
+import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
+import dev.nextftc.core.commands.groups.ParallelGroup;
+import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
+import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
@@ -19,6 +24,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 public abstract class SixBall extends NextFTCOpMode { // constant over every auto
     protected final Poses.AllianceColor alliance;
     private final double ShootTime = 0.8; //seconds
+
     public SixBall(Poses.AllianceColor alliance) {
         addComponents(
 
@@ -30,11 +36,11 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
         this.alliance = alliance;
     }
 
-    private Pose StartPose = new Pose(15,119.2, Math.toRadians(324)); //make poses for every point
-    private Pose ScorePose = new Pose(50.4,84.2, Math.toRadians(270));
-    private Pose MiddleSpikePose = new Pose(15.2,60, Math.toRadians(180));
-    private Pose MiddleSpikeControl = new Pose(58.8,57.7);
-    private Pose EndScorePose = new Pose(62.8,98);
+    private Pose StartPose = new Pose(15, 119.2, Math.toRadians(324)); //make poses for every point
+    private Pose ScorePose = new Pose(50.4, 84.2, Math.toRadians(270));
+    private Pose MiddleSpikePose = new Pose(15.2, 60, Math.toRadians(180));
+    private Pose MiddleSpikeControl = new Pose(58.8, 57.7);
+    private Pose EndScorePose = new Pose(62.8, 98);
 
     private void InitPoses() {
         if (alliance == Poses.AllianceColor.RED) {
@@ -47,6 +53,7 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
     }
 
     private PathChain ScorePreload, IntakeMiddleSpike, ScoreMiddleSpike; //actually making paths
+
     private void BuildPaths() {
         ScorePreload = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierLine(StartPose, ScorePose))
@@ -62,5 +69,48 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
                 .build();
     }
 
+    private Command ShootArtifacts() {
+        return new SequentialGroup(
+                new SequentialGroup(
+                        Intake.INSTANCE.GateOpen,
+                        Intake.INSTANCE.intakeSpin,
+                        new Delay(ShootTime)
+                ),
+                new ParallelGroup(
+                        Intake.INSTANCE.GateClose,
+                        Intake.INSTANCE.intakeOff
+                )
+        );
+    }
 
-}
+    private Command autonomousRoutine() {
+        return new SequentialGroup(
+                new ParallelGroup( //drives to first point while spinning flywheel and turning on tracking
+                        new FollowPath(ScorePreload),
+                        Shooter.INSTANCE.FlywheelOn
+                        //Turret.INSTANCE.enableTracking
+                ),
+                ShootArtifacts(),
+                Shooter.INSTANCE.FlywheelOff,
+
+                //intake middle spike
+                Intake.INSTANCE.intakeSpin,
+                new FollowPath(IntakeMiddleSpike),
+
+                //scoring middle spike
+                Shooter.INSTANCE.FlywheelOn,
+                new FollowPath(ScoreMiddleSpike),
+
+                ShootArtifacts()
+
+        );
+    }
+    @Override
+    public void onInit() {
+        Poses.SetAlliance(alliance);
+        InitPoses();
+        BuildPaths();
+        PedroComponent.follower().setStartingPose(StartPose);
+    }
+    }
+
