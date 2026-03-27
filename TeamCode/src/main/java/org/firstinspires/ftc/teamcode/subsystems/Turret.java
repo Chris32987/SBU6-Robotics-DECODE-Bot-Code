@@ -24,12 +24,12 @@ public class Turret implements Subsystem {
         Pose RobotPose = PedroComponent.follower().getPose();
         double dx = CurrentGoalPos.getX() - RobotPose.getX();
         double dy = CurrentGoalPos.getY() - RobotPose.getY();
-        double rawDelta = Math.atan2(dy, dx) + RobotPose.getHeading();
+        double rawDelta = Math.atan2(dy, dx) - RobotPose.getHeading();
 
         double AngleRad = Math.atan2(Math.sin(rawDelta), Math.cos(rawDelta));
 
         double CalcGoalTicks = (AngleRad / (2 * Math.PI)) * 145.1 * (97.0/18.0);
-        return Math.max(-150, Math.min(CalcGoalTicks, 150));
+        return Math.max(-400, Math.min(CalcGoalTicks, 300));
     }
     public Command TrackingOn = new InstantCommand(() -> EnableTracking = true);
     public Command TrackingOff = new InstantCommand(() -> EnableTracking = false);
