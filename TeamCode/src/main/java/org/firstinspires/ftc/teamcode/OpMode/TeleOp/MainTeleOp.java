@@ -51,6 +51,7 @@ public class MainTeleOp extends NextFTCOpMode {
         }
 
         driverControlled.schedule();
+        Turret.INSTANCE.setTurretPosition(0).schedule();
         Gamepads.gamepad1().leftTrigger().greaterThan(0.05)
                 .whenBecomesTrue(Intake.INSTANCE.intakeSpin)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
