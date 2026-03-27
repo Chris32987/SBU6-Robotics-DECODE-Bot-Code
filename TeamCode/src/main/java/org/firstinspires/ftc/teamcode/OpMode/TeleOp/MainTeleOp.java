@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Turret;
 //import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import dev.nextftc.core.commands.Command;
@@ -51,6 +52,7 @@ public class MainTeleOp extends NextFTCOpMode {
         }
 
         driverControlled.schedule();
+        Turret.INSTANCE.SetTurretPosition(0).schedule();
         Gamepads.gamepad1().leftTrigger().greaterThan(0.05)
                 .whenBecomesTrue(Intake.INSTANCE.intakeSpin)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
@@ -71,6 +73,10 @@ public class MainTeleOp extends NextFTCOpMode {
 
     }
     @Override public void onUpdate() {
+        Pose robotPose = PedroComponent.follower().getPose();
+        telemetry.addData("Robot X", robotPose.getX());
+        telemetry.addData("Robot Y", robotPose.getY());
+        telemetry.addData("Robot Heading", robotPose.getHeading());
         telemetry.update(); // LOOK HERE
     }
     @Override public void onStop() { }

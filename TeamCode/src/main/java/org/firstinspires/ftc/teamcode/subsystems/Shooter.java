@@ -37,7 +37,7 @@ public class Shooter implements Subsystem {
 
     private final InterpLUT hoodLUT = new InterpLUT(
             Arrays.asList(40.0, 50.0, 55.0, 70.0, 80.0, 90.0),
-            Arrays.asList(0.1, 0.30, 0.24,  0.20, 0.26, 0.18)
+            Arrays.asList(0.5, 0.5, 0.5,  0.5, 0.5, 0.5)
     ).createLUT();
 
     private boolean spinFlywheel = false;
