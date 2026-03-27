@@ -18,7 +18,7 @@ public class Turret implements Subsystem {
 
     private Turret() {
     }
-    private final MotorEx TurretMotor = new MotorEx("TurretMotor").brakeMode().zeroed();
+    private final MotorEx TurretMotor = new MotorEx("TurretMotor").brakeMode().zeroed().reversed();
     private boolean EnableTracking = false;
     private double CalculateTurretPos(Pose CurrentGoalPos){
         Pose RobotPose = PedroComponent.follower().getPose();
