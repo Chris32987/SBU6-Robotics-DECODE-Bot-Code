@@ -39,7 +39,7 @@ public class MainTeleOp extends NextFTCOpMode {
                     Gamepads.gamepad1().leftStickY(),
                     Gamepads.gamepad1().leftStickX(),
                     Gamepads.gamepad1().rightStickX().negate(),
-                    false
+                    true
             );
         }
         else {
@@ -47,7 +47,7 @@ public class MainTeleOp extends NextFTCOpMode {
                     Gamepads.gamepad1().leftStickY().negate(),
                     Gamepads.gamepad1().leftStickX().negate(),
                     Gamepads.gamepad1().rightStickX().negate(),
-                    false
+                    true
             );
         }
 
