@@ -5,10 +5,12 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
+import org.firstinspires.ftc.teamcode.Drawing;
 import org.firstinspires.ftc.teamcode.Poses;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.Turret;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
@@ -30,13 +32,13 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
 
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE,
-                new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE),
+                new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE, Turret.INSTANCE),
                 new PedroComponent(Constants::createFollower)
         );
         this.alliance = alliance;
     }
 
-    private Pose StartPose = new Pose(15, 119.2, Math.toRadians(324)); //make poses for every point
+    private Pose StartPose = new Pose(15.2, 119, Math.toRadians(324)); //make poses for every point
     private Pose ScorePose = new Pose(50.4, 84.2, Math.toRadians(270));
     private Pose MiddleSpikePose = new Pose(15.2, 60, Math.toRadians(180));
     private Pose MiddleSpikeControl = new Pose(58.8, 57.7);
@@ -87,8 +89,11 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
         return new SequentialGroup(
                 new ParallelGroup( //drives to first point while spinning flywheel and turning on tracking
                         new FollowPath(ScorePreload),
-                        Shooter.INSTANCE.FlywheelOn
-                        //Turret.INSTANCE.enableTracking
+                        Shooter.INSTANCE.FlywheelOn,
+                        new SequentialGroup(
+                                new Delay(0.4),
+                                Turret.INSTANCE.TrackingOn
+                        )
                 ),
                 ShootArtifacts(),
                 Shooter.INSTANCE.FlywheelOff,
@@ -102,7 +107,6 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
                 new FollowPath(ScoreMiddleSpike),
 
                 ShootArtifacts()
-
         );
     }
     @Override
@@ -112,5 +116,33 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
         BuildPaths();
         PedroComponent.follower().setStartingPose(StartPose);
     }
+
+    @Override
+    public void onStartButtonPressed() {
+        autonomousRoutine().schedule();
     }
+    @Override
+    public void onUpdate() {
+        Pose robotPose = PedroComponent.follower().getPose();
+        Poses.AutoEnd = robotPose;
+        Poses.TurretEnd = Turret.INSTANCE.GetTurretPosition();
+        telemetry.addData("Robot X", robotPose.getX());
+        telemetry.addData("Robot Y", robotPose.getY());
+        telemetry.addData("Robot Heading", robotPose.getHeading());
+        telemetry.addData("Alliance", Poses.CurrentAlliance);
+        telemetry.addData("Goal Pose", Poses.Goal);
+        telemetry.addData("AutoEndThink", Poses.AutoEnd);
+        telemetry.update();
+        drawOnlyCurrent();
+    }
+
+    public static void drawOnlyCurrent() {
+        try {
+            Drawing.drawRobot(PedroComponent.follower().getPose());
+            Drawing.sendPacket();
+        } catch (Exception e) {
+            throw new RuntimeException("Drawing failed " + e);
+        }
+    }
+}
 

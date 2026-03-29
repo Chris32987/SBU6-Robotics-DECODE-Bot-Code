@@ -24,18 +24,20 @@ public class Turret implements Subsystem {
         Pose RobotPose = PedroComponent.follower().getPose();
         double dx = CurrentGoalPos.getX() - RobotPose.getX();
         double dy = CurrentGoalPos.getY() - RobotPose.getY();
-        double rawDelta = Math.atan2(dy, dx) - RobotPose.getHeading();
+        double rawDelta = Math.atan2(dy, dx) - (RobotPose.getHeading() + Math.PI);
 
         double AngleRad = Math.atan2(Math.sin(rawDelta), Math.cos(rawDelta));
 
         double CalcGoalTicks = (AngleRad / (2 * Math.PI)) * 145.1 * (97.0/18.0);
-        return Math.max(-400, Math.min(CalcGoalTicks, 300));
+        return Math.max(-300, Math.min(CalcGoalTicks, 400));
     }
     public Command TrackingOn = new InstantCommand(() -> EnableTracking = true);
     public Command TrackingOff = new InstantCommand(() -> EnableTracking = false);
     public Command SetTurretPosition(double pos) {
         return new InstantCommand(() -> TurretMotor.setCurrentPosition(pos));
     }
+
+    public double GetTurretPosition() {return TurretMotor.getCurrentPosition(); }
     ControlSystem controller = ControlSystem.builder()
             .posPid(0.005, 0, 0)
             .build();
@@ -46,7 +48,7 @@ public class Turret implements Subsystem {
         controller.setGoal(new KineticState(target, 0, 0));
         TurretMotor.setPower(!EnableTracking ? 0 : controller.calculate(TurretMotor.getState().times(-1))); //w claude
         ActiveOpMode.telemetry().addData("TurretTarget", target);
-        ActiveOpMode.telemetry().addData("TurretPos", TurretMotor.getCurrentPosition());
+        ActiveOpMode.telemetry().addData("TurretPos", TurretMotor.getCurrentPosition()*-1);
         ActiveOpMode.telemetry().addData("TurretPower", controller.calculate(TurretMotor.getState().times(-1)));
     }
 

@@ -15,6 +15,7 @@ import dev.nextftc.core.components.SubsystemComponent;
 //import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.extensions.pedro.PedroDriverControlled;
+import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
@@ -30,10 +31,19 @@ public class MainTeleOp extends NextFTCOpMode {
         );
 
     }
-    @Override public void onInit() { }
-    @Override public void onWaitForStart() { }
+    @Override public void onInit() {
+        PedroComponent.follower().setPose(Poses.AutoEnd);
+        Turret.INSTANCE.TrackingOff.schedule();
+    }
+    @Override public void onWaitForStart() {
+        telemetry.addData("AutoEndPos", Poses.AutoEnd);
+        telemetry.addData("CurrentPos", PedroComponent.follower().getPose());
+        telemetry.update();
+
+    }
     @Override public void onStartButtonPressed() {
         Command driverControlled;
+
         if (Poses.CurrentAlliance == Poses.AllianceColor.BLUE) {
             driverControlled = new PedroDriverControlled(
                     Gamepads.gamepad1().leftStickY(),
@@ -52,7 +62,8 @@ public class MainTeleOp extends NextFTCOpMode {
         }
 
         driverControlled.schedule();
-        Turret.INSTANCE.SetTurretPosition(0).schedule();
+        Turret.INSTANCE.SetTurretPosition(Poses.TurretEnd).schedule();
+        Turret.INSTANCE.TrackingOn.schedule();
         Gamepads.gamepad1().leftTrigger().greaterThan(0.05)
                 .whenBecomesTrue(Intake.INSTANCE.intakeSpin)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);

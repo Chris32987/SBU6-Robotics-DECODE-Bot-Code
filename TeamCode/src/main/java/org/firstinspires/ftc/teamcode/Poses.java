@@ -11,7 +11,10 @@ public class Poses {
     public static Pose Goal = new Pose(10,135);
     public static Pose AutoEnd = new Pose (15,119.2,Math.toRadians(144));
 
+    public static double TurretEnd = 0;
+
     public static void SetAlliance(AllianceColor alliance){
+        TurretEnd = 0;
         if(alliance == AllianceColor.BLUE){
             CurrentAlliance = AllianceColor.BLUE;
             Goal = new Pose(10,135);

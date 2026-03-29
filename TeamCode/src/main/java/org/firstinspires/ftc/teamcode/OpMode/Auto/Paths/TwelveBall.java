@@ -1,14 +1,17 @@
 package org.firstinspires.ftc.teamcode.OpMode.Auto.Paths;
 
+
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
+import org.firstinspires.ftc.teamcode.Drawing;
 import org.firstinspires.ftc.teamcode.Poses;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.Turret;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
@@ -151,4 +154,33 @@ public abstract class TwelveBall extends NextFTCOpMode {
         BuildPaths();
         PedroComponent.follower().setStartingPose(StartPose);
     }
+    @Override
+    public void onStartButtonPressed() {
+        autonomousRoutine().schedule();
+    }
+    @Override
+    public void onUpdate() {
+        Pose robotPose = PedroComponent.follower().getPose();
+        Poses.AutoEnd = robotPose;
+        Poses.TurretEnd = Turret.INSTANCE.GetTurretPosition();
+        telemetry.addData("Robot X", robotPose.getX());
+        telemetry.addData("Robot Y", robotPose.getY());
+        telemetry.addData("Robot Heading", robotPose.getHeading());
+        telemetry.addData("Alliance", Poses.CurrentAlliance);
+        telemetry.addData("Goal Pose", Poses.Goal);
+        telemetry.addData("AutoEndThink", Poses.AutoEnd);
+        telemetry.update();
+        drawOnlyCurrent();
+    }
+
+    public static void drawOnlyCurrent() {
+        try {
+            Drawing.drawRobot(PedroComponent.follower().getPose());
+            Drawing.sendPacket();
+        } catch (Exception e) {
+            throw new RuntimeException("Drawing failed " + e);
+        }
+    }
+}
+
 }
