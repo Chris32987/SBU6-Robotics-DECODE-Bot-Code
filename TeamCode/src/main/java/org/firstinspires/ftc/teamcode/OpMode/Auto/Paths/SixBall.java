@@ -29,7 +29,6 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
 
     public SixBall(Poses.AllianceColor alliance) {
         addComponents(
-
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE,
                 new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE, Turret.INSTANCE),
@@ -124,7 +123,7 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
     @Override
     public void onUpdate() {
         Pose robotPose = PedroComponent.follower().getPose();
-        Poses.AutoEnd = robotPose;
+        Poses.AutoEnd = new Pose(robotPose.getX(), robotPose.getY(), robotPose.getHeading());
         Poses.TurretEnd = Turret.INSTANCE.GetTurretPosition();
         telemetry.addData("Robot X", robotPose.getX());
         telemetry.addData("Robot Y", robotPose.getY());
@@ -132,8 +131,15 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
         telemetry.addData("Alliance", Poses.CurrentAlliance);
         telemetry.addData("Goal Pose", Poses.Goal);
         telemetry.addData("AutoEndThink", Poses.AutoEnd);
+        telemetry.addData("Log", Poses.instanceId);
         telemetry.update();
         drawOnlyCurrent();
+    }
+
+    @Override
+    public void onStop() {
+        Turret.INSTANCE.TrackingOff.schedule();
+        Shooter.INSTANCE.FlywheelOff.schedule();
     }
 
     public static void drawOnlyCurrent() {

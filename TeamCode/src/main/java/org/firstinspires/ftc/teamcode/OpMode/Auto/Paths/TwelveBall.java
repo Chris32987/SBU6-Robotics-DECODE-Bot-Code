@@ -32,27 +32,27 @@ public abstract class TwelveBall extends NextFTCOpMode {
         addComponents(
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE,
-                new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE),
+                new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE, Turret.INSTANCE),
                 new PedroComponent(Constants::createFollower)
         );
         this.alliance = alliance;
     }
 
-    private Pose StartPose     = new Pose(15,      119.2,   Math.toRadians(324));
+    private Pose StartPose     = new Pose(15.2,      119,   Math.toRadians(324));
     private Pose ScorePose     = new Pose(32.976,  108.539, Math.toRadians(270));
-    private Pose Spike1Control = new Pose(46.398,  80.037);
-    private Pose Spike1Pose    = new Pose(11.411,  83.929,  Math.toRadians(170));
+    private Pose Spike1Control = new Pose(70,  90);
+    private Pose Spike1Pose    = new Pose(12.411,  83.929,  Math.toRadians(170));
     private Pose ScorePose2    = new Pose(55.802,  84.189,  Math.toRadians(-86));
     private Pose Spike2Control = new Pose(58.002,  57.245);
-    private Pose Spike2Pose    = new Pose(12.136,  60.152,  Math.toRadians(0));
+    private Pose Spike2Pose    = new Pose(9.136,  60.152,  Math.toRadians(180));
     private Pose ScorePose3    = new Pose(64.626,  75.066,  Math.toRadians(-102));
-    private Pose Spike3Control = new Pose(53.580,  31.733);
-    private Pose Spike3Pose    = new Pose(14.387,  35.427,  Math.toRadians(0));
-    private Pose EndScorePose  = new Pose(58.870,  111.051, Math.toRadians(0));
+    private Pose Spike3Control = new Pose(58.002,  32.733);
+    private Pose Spike3Pose    = new Pose(10.387,  35.427);
+    private Pose EndScorePose  = new Pose(58.870,  111.051);
 
     private void InitPoses() {
         if (alliance == Poses.AllianceColor.RED) {
-            StartPose     = StartPose.mirror();
+            StartPose = StartPose.mirror();
             ScorePose     = ScorePose.mirror();
             Spike1Control = Spike1Control.mirror();
             Spike1Pose    = Spike1Pose.mirror();
@@ -115,15 +115,20 @@ public abstract class TwelveBall extends NextFTCOpMode {
 
     private Command autonomousRoutine() {
         return new SequentialGroup(
-                new ParallelGroup(
+                new ParallelGroup( //drives to first point while spinning flywheel and turning on tracking
                         new FollowPath(ScorePreload),
-                        Shooter.INSTANCE.FlywheelOn
+                        Shooter.INSTANCE.FlywheelOn,
+                        new SequentialGroup(
+                                new Delay(0.4),
+                                Turret.INSTANCE.TrackingOn
+                        )
                 ),
                 ShootArtifacts(),
                 Shooter.INSTANCE.FlywheelOff,
 
                 Intake.INSTANCE.intakeSpin,
                 new FollowPath(IntakeSpike1),
+                Intake.INSTANCE.intakeOff,
 
                 Shooter.INSTANCE.FlywheelOn,
                 new FollowPath(ScoreSpike1),
@@ -132,6 +137,7 @@ public abstract class TwelveBall extends NextFTCOpMode {
 
                 Intake.INSTANCE.intakeSpin,
                 new FollowPath(IntakeSpike2),
+                Intake.INSTANCE.intakeOff,
 
                 Shooter.INSTANCE.FlywheelOn,
                 new FollowPath(ScoreSpike2),
@@ -140,6 +146,7 @@ public abstract class TwelveBall extends NextFTCOpMode {
 
                 Intake.INSTANCE.intakeSpin,
                 new FollowPath(IntakeSpike3),
+                Intake.INSTANCE.intakeOff,
 
                 Shooter.INSTANCE.FlywheelOn,
                 new FollowPath(ScoreSpike3),
@@ -181,6 +188,4 @@ public abstract class TwelveBall extends NextFTCOpMode {
             throw new RuntimeException("Drawing failed " + e);
         }
     }
-}
-
 }

@@ -39,7 +39,7 @@ public class Turret implements Subsystem {
 
     public double GetTurretPosition() {return TurretMotor.getCurrentPosition(); }
     ControlSystem controller = ControlSystem.builder()
-            .posPid(0.005, 0, 0)
+            .posPid(0.015, 0, 0.0002)
             .build();
 
     @Override
@@ -49,7 +49,6 @@ public class Turret implements Subsystem {
         TurretMotor.setPower(!EnableTracking ? 0 : controller.calculate(TurretMotor.getState().times(-1))); //w claude
         ActiveOpMode.telemetry().addData("TurretTarget", target);
         ActiveOpMode.telemetry().addData("TurretPos", TurretMotor.getCurrentPosition()*-1);
-        ActiveOpMode.telemetry().addData("TurretPower", controller.calculate(TurretMotor.getState().times(-1)));
     }
 
 }
