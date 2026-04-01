@@ -26,7 +26,7 @@ public class TuningShooter implements Subsystem {
     public ServoEx HoodServoLeft = new ServoEx("HoodServoLeft");
 
     ControlSystem controller = ControlSystem.builder()
-            .velPid(0.003,0,0)
+            .velPid(0.005,0,0)
             .basicFF(0.00038,0,0.09)
             .build();
 

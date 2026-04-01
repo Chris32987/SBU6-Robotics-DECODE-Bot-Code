@@ -38,7 +38,7 @@ public abstract class EighteenBall extends NextFTCOpMode {
         this.alliance = alliance;
     }
 
-    private Pose StartPose = new Pose(15.2, 119, Math.toRadians(90));
+    private Pose StartPose = new Pose(15.2, 119, Math.toRadians(324));
 
     // preload
     private Pose ScorePreloadPose = new Pose(52.095, 93.356, Math.toRadians(-74));

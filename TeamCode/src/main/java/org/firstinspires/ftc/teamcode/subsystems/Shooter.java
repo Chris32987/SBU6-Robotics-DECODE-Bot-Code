@@ -13,6 +13,7 @@ import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.extensions.pedro.PedroComponent;
+import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.hardware.controllable.MotorGroup;
 import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.impl.ServoEx;
@@ -24,21 +25,21 @@ public class Shooter implements Subsystem {
     }
 
     private final MotorGroup flywheelMotors = new MotorGroup(
-            new MotorEx("flywheelMotor1").reversed().floatMode(),
-            new MotorEx("flywheelMotor2").floatMode()
+            new MotorEx("flywheelMotor2").floatMode(),
+            new MotorEx("flywheelMotor1").reversed().floatMode()
     );
 
     private final ServoEx HoodServoRight = new ServoEx("HoodServoRight");
     private final ServoEx HoodServoLeft = new ServoEx("HoodServoLeft");
 
-    private final InterpLUT velocityLUT = new InterpLUT( // SORT THEM SO THAT THE FIRST ARRAY IS IN ORDER AND REARRANGE THE ARRAY POINTS SO THAT THEY MATCH UP
-            Arrays.asList(20.5429, 13.3075, 43.4068, 54.2784, 60.5693),
-            Arrays.asList(1080.0, 1040.0, 1140.0, 1360.0, 1260.0)
+    private final InterpLUT velocityLUT = new InterpLUT(
+            Arrays.asList(13.3075, 16.732789, 20.5429, 43.4068, 51.3478, 54.2784, 60.5693, 64.4066, 76.3039),
+            Arrays.asList(1040.0, 1280.0, 1080.0, 1140.0, 1320.0, 1360.0, 1260.0, 1480.0, 1540.0)
     ).createLUT();
 
     private final InterpLUT hoodLUT = new InterpLUT(
-            Arrays.asList(20.5429, 13.3075, 43.4068, 54.2784, 60.5693),
-            Arrays.asList(0.64, 0.64, 0.60, 0.54, 0.56)
+            Arrays.asList(13.3075, 16.732789, 20.5429, 43.4068, 51.3478, 54.2784, 60.5693, 64.4066, 76.3039),
+            Arrays.asList(0.64, 0.56, 0.64, 0.60, 0.54, 0.54, 0.56, 0.52, 0.52)
     ).createLUT();
 
     private boolean spinFlywheel = false;
@@ -46,8 +47,8 @@ public class Shooter implements Subsystem {
 
 
     ControlSystem controller = ControlSystem.builder()
-            .velPid(0, 0, 0)
-            .basicFF(0, 0, 0.001)
+            .velPid(0.005,0,0)
+            .basicFF(0.00038,0,0.09)
             .build();
 
     public Command FlywheelOn = new InstantCommand(() -> spinFlywheel = true);
@@ -66,6 +67,10 @@ public class Shooter implements Subsystem {
 
         controller.setGoal(new KineticState(0, TargetVelocity, 0));
 
-        flywheelMotors.setPower(!spinFlywheel ? 0 : controller.calculate(flywheelMotors.getState()));
+        flywheelMotors.setPower(!spinFlywheel ? 0 : controller.calculate(flywheelMotors.getState().times(-1)));
 
-}}
+        ActiveOpMode.telemetry().addData("Flywheel Speed", flywheelMotors.getVelocity() * -1);
+        ActiveOpMode.telemetry().addData("Flyweel Target", TargetVelocity);
+        ActiveOpMode.telemetry().addData("Hood Position", HoodServoRight.getPosition());
+    }
+}

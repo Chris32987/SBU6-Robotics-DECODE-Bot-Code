@@ -101,14 +101,14 @@ public class TuningOpmode extends NextFTCOpMode {
                 .whenBecomesTrue(new SequentialGroup(
                         new ParallelGroup(
                                 Intake.INSTANCE.GateOpen,
-                                Shooter.INSTANCE.FlywheelOn
+                                TuningShooter.INSTANCE.turnOn
                         ),
                         new Delay(0.5),
                         Intake.INSTANCE.intakeSpin
                 ))
                 .whenBecomesFalse( new ParallelGroup(
                         Intake.INSTANCE.intakeOff,
-                        Shooter.INSTANCE.FlywheelOff,
+                        TuningShooter.INSTANCE.turnOff,
                         Intake.INSTANCE.GateClose
                 ));
     }
