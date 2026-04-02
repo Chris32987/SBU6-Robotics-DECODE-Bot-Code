@@ -36,9 +36,13 @@ public class MainTeleOp extends NextFTCOpMode {
         );
 
     }
+
+    private PedroDriverControlled driverControlled;
+
     @Override public void onInit() {
         PedroComponent.follower().setPose(Poses.AutoEnd);
         Turret.INSTANCE.TrackingOff.schedule();
+        Turret.INSTANCE.SetTurretPosition(Poses.TurretEnd).schedule();
     }
     @Override public void onWaitForStart() {
         telemetry.addData("AutoEndPos", Poses.AutoEnd);
@@ -48,14 +52,13 @@ public class MainTeleOp extends NextFTCOpMode {
 
     }
     @Override public void onStartButtonPressed() {
-        Command driverControlled;
 
         if (Poses.CurrentAlliance == Poses.AllianceColor.BLUE) {
             driverControlled = new PedroDriverControlled(
                     Gamepads.gamepad1().leftStickY(),
                     Gamepads.gamepad1().leftStickX(),
                     Gamepads.gamepad1().rightStickX().negate(),
-                    true
+                    false
             );
         }
         else {
@@ -63,13 +66,12 @@ public class MainTeleOp extends NextFTCOpMode {
                     Gamepads.gamepad1().leftStickY().negate(),
                     Gamepads.gamepad1().leftStickX().negate(),
                     Gamepads.gamepad1().rightStickX().negate(),
-                    true
+                    false
             );
         }
 
         driverControlled.schedule();
-        Turret.INSTANCE.SetTurretPosition(Poses.TurretEnd).schedule();
-        Turret.INSTANCE.TrackingOn.schedule();
+        //Turret.INSTANCE.TrackingOn.schedule();
         Gamepads.gamepad1().leftTrigger().greaterThan(0.05)
                 .whenBecomesTrue(Intake.INSTANCE.intakeSpin)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
@@ -98,6 +100,8 @@ public class MainTeleOp extends NextFTCOpMode {
                 .whenBecomesFalse(Turret.INSTANCE.TrackingOff);
     }
     @Override public void onUpdate() {
+        driverControlled.setScalar(0.25);
+
         Pose robotPose = PedroComponent.follower().getPose();
         telemetry.addData("Robot X", robotPose.getX());
         telemetry.addData("Robot Y", robotPose.getY());
