@@ -38,29 +38,31 @@ public abstract class EighteenBall extends NextFTCOpMode {
         this.alliance = alliance;
     }
 
-    private Pose StartPose = new Pose(15.2, 119, Math.toRadians(324));
+    private Pose StartPose = new Pose(15, 119.2, Math.toRadians(324));
 
     // preload
     private Pose ScorePreloadPose = new Pose(52.095, 93.356, Math.toRadians(-74));
 
     // middle spike
-    private Pose IntakeMiddleSpikeControl = new Pose(62.969, 55.892);
-    private Pose IntakeMiddleSpikePose = new Pose(13.434, 59.800, Math.toRadians(0));
-    private Pose ScoreMiddleSpikePose = new Pose(60.031, 76.434, Math.toRadians(0));
+    private Pose IntakeMiddleSpikeControl = new Pose(58.002,  57.245);
+    private Pose IntakeMiddleSpikePose =  new Pose(9.136,  60.152);
+    private Pose ScoreMiddleSpikePose = new Pose(60.031, 76.434, Math.toRadians(180));
 
     // gate intake run 1
-    private Pose ApproachGateIntake1Control = new Pose(31.717, 69.619);
-    private Pose ApproachGateIntake1Pose = new Pose(11.403, 69.732, Math.toRadians(0));
+    private Pose ApproachGateIntake1Control = new Pose(2.559, 73.856);
+    private Pose ApproachGateIntake1Control2 = new Pose(52, 57.23);
+    private Pose ApproachGateIntake1Pose = new Pose(40, 69.732, Math.toRadians(90));
     private Pose GateIntake1Control = new Pose(14.510, 60.203);
-    private Pose GateIntake1Pose = new Pose(4.247, 55.800, Math.toRadians(90));
+    private Pose GateIntake1Pose = new Pose(4.247, 53, Math.toRadians(100));
     private Pose ScoreGateIntake1Pose = new Pose(60.939, 76.434, Math.toRadians(0));
 
     // gate intake run 2
-    private Pose ApproachGateIntake2Control = new Pose(31.578, 69.564);
-    private Pose ApproachGateIntake2Pose = new Pose(11.349, 69.529, Math.toRadians(0));
-    private Pose GateIntake2Control = new Pose(14.195, 60.108);
-    private Pose GateIntake2Pose = new Pose(4.207, 56.105, Math.toRadians(90));
-    private Pose ScoreGateIntake2Pose = new Pose(57.854, 84.861, Math.toRadians(0));
+    private Pose ApproachGateIntake2Control = new Pose(2.559, 73.856);
+    private Pose ApproachGateIntake2Control2 = new Pose(24.817, 53.331);
+    private Pose ApproachGateIntake2Pose = new Pose(40, 69.732, Math.toRadians(180));
+    private Pose GateIntake2Control = new Pose(14.510, 60.203);
+    private Pose GateIntake2Pose = new Pose(4.247, 55.800, Math.toRadians(90));
+    private Pose ScoreGateIntake2Pose = new Pose(60.939, 76.434, Math.toRadians(0));
 
     // close spike
     private Pose IntakeCloseSpikePose = new Pose(14.831, 83.695, Math.toRadians(0));
@@ -76,6 +78,8 @@ public abstract class EighteenBall extends NextFTCOpMode {
             StartPose = StartPose.mirror();
             ScorePreloadPose = ScorePreloadPose.mirror();
             IntakeMiddleSpikeControl = IntakeMiddleSpikeControl.mirror();
+            ApproachGateIntake1Control2 = ApproachGateIntake1Control2.mirror();
+            ApproachGateIntake2Control2 = ApproachGateIntake2Control2.mirror();
             IntakeMiddleSpikePose = IntakeMiddleSpikePose.mirror();
             ScoreMiddleSpikePose = ScoreMiddleSpikePose.mirror();
             ApproachGateIntake1Control = ApproachGateIntake1Control.mirror();
@@ -124,43 +128,19 @@ public abstract class EighteenBall extends NextFTCOpMode {
 
         // reposition to get in line for the gate
         approachGateIntake1 = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierCurve(ScoreMiddleSpikePose, ApproachGateIntake1Control, ApproachGateIntake1Pose))
-                .setTangentHeadingInterpolation()
-                .build();
-
-        // run through the gate to collect balls
-        gateIntake1 = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierCurve(ApproachGateIntake1Pose, GateIntake1Control, GateIntake1Pose))
-                .setLinearHeadingInterpolation(Math.toRadians(-180), GateIntake1Pose.getHeading())
+                .addPath(new BezierCurve(ScoreMiddleSpikePose, ApproachGateIntake1Control, ApproachGateIntake1Control2, GateIntake1Pose))
+                .setLinearHeadingInterpolation(ScoreMiddleSpikePose.getHeading(), GateIntake1Pose.getHeading())
                 .build();
 
         // drive back to score gate intake run 1, reversed
         scoreGateIntake1 = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(GateIntake1Pose, ScoreGateIntake1Pose))
+                .addPath(new BezierLine(GateIntake1Pose,ScoreMiddleSpikePose))
                 .setTangentHeadingInterpolation().setReversed()
-                .build();
-
-        // reposition to line up for the gate again
-        approachGateIntake2 = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierCurve(ScoreGateIntake1Pose, ApproachGateIntake2Control, ApproachGateIntake2Pose))
-                .setTangentHeadingInterpolation()
-                .build();
-
-        // run through the gate again to collect more balls
-        gateIntake2 = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierCurve(ApproachGateIntake2Pose, GateIntake2Control, GateIntake2Pose))
-                .setLinearHeadingInterpolation(Math.toRadians(-180), GateIntake2Pose.getHeading())
-                .build();
-
-        // drive back to score gate intake run 2
-        scoreGateIntake2 = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(GateIntake2Pose, ScoreGateIntake2Pose))
-                .setTangentHeadingInterpolation()
                 .build();
 
         // straight line grab of the close spike ball
         intakeCloseSpike = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(ScoreGateIntake2Pose, IntakeCloseSpikePose))
+                .addPath(new BezierLine(ScoreMiddleSpikePose, IntakeCloseSpikePose))
                 .setTangentHeadingInterpolation()
                 .build();
 
@@ -223,10 +203,9 @@ public abstract class EighteenBall extends NextFTCOpMode {
                 Shooter.INSTANCE.FlywheelOff,
 
                 // gate intake run 1
-                new FollowPath(approachGateIntake1),
-
                 Intake.INSTANCE.intakeSpin,
-                new FollowPath(gateIntake1),
+                new FollowPath(approachGateIntake1),
+                new Delay(1.5),
                 Intake.INSTANCE.intakeOff,
 
                 Shooter.INSTANCE.FlywheelOn,
@@ -234,15 +213,14 @@ public abstract class EighteenBall extends NextFTCOpMode {
                 ShootArtifacts(),
                 Shooter.INSTANCE.FlywheelOff,
 
-                // gate intake run 2
-                new FollowPath(approachGateIntake2),
-
+                // gate intake run 1
                 Intake.INSTANCE.intakeSpin,
-                new FollowPath(gateIntake2),
+                new FollowPath(approachGateIntake1),
+                new Delay(1.5),
                 Intake.INSTANCE.intakeOff,
 
                 Shooter.INSTANCE.FlywheelOn,
-                new FollowPath(scoreGateIntake2),
+                new FollowPath(scoreGateIntake1),
                 ShootArtifacts(),
                 Shooter.INSTANCE.FlywheelOff,
 
@@ -264,6 +242,8 @@ public abstract class EighteenBall extends NextFTCOpMode {
                 Shooter.INSTANCE.FlywheelOn,
                 new FollowPath(scoreFarSpike),
                 ShootArtifacts()
+
+ */
         );
     }
 
@@ -273,6 +253,7 @@ public abstract class EighteenBall extends NextFTCOpMode {
         InitPoses();
         BuildPaths();
         PedroComponent.follower().setStartingPose(StartPose);
+        Turret.INSTANCE.SetTurretPosition(-391).schedule();
     }
 
     @Override

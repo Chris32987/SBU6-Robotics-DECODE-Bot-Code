@@ -33,14 +33,15 @@ public class Shooter implements Subsystem {
     private final ServoEx HoodServoLeft = new ServoEx("HoodServoLeft");
 
     private final InterpLUT velocityLUT = new InterpLUT(
-            Arrays.asList(13.3075, 16.732789, 20.5429, 43.4068, 51.3478, 54.2784, 60.5693, 64.4066, 76.3039),
-            Arrays.asList(1040.0, 1280.0, 1080.0, 1140.0, 1320.0, 1360.0, 1260.0, 1480.0, 1540.0)
+            Arrays.asList(14.1227, 18.8251, 34.051, 36.8652, 38.7481, 42.0104, 60.1323, 62.0396, 63.0719),
+            Arrays.asList(1240.0, 1280.0, 1560.0, 1500.0, 1640.0, 1580.0, 1600.0, 1680.0, 1800.0)
     ).createLUT();
 
     private final InterpLUT hoodLUT = new InterpLUT(
-            Arrays.asList(13.3075, 16.732789, 20.5429, 43.4068, 51.3478, 54.2784, 60.5693, 64.4066, 76.3039),
-            Arrays.asList(0.64, 0.56, 0.64, 0.60, 0.54, 0.54, 0.56, 0.52, 0.52)
+            Arrays.asList(14.1227, 18.8251, 34.051, 36.8652, 38.7481, 42.0104, 60.1323, 62.0396, 63.0719),
+            Arrays.asList(0.66, 0.62, 0.56, 0.58, 0.54, 0.54, 0.56, 0.56, 0.54 )
     ).createLUT();
+
 
     private boolean spinFlywheel = false;
     public boolean AtSpeed = false;
