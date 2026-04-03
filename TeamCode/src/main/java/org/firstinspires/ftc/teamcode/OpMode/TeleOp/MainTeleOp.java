@@ -98,6 +98,7 @@ public class MainTeleOp extends NextFTCOpMode {
                                 new Delay(1),
                                 new WaitUntil(() -> Shooter.INSTANCE.AtSpeed)
                         ),
+                        new WaitUntil(() -> Turret.INSTANCE.Aimed),
                         new ParallelGroup(
                                 Intake.INSTANCE.GateOpen,
                                 Intake.INSTANCE.intakeSpin
