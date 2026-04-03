@@ -36,10 +36,19 @@ public class TuningOpmode extends NextFTCOpMode {
 
     public static double hoodPos = 0.4;
 
-    @Override
-    public void onWaitForStart() {
+    @Override public void onInit() {
         PedroComponent.follower().setPose(Poses.AutoEnd);
-        Gamepads.gamepad1().rightStickX();
+        Turret.INSTANCE.TrackingOff.schedule();
+        Turret.INSTANCE.SetTurretPosition(Poses.TurretEnd).schedule();
+    }
+    @Override
+
+    public void onWaitForStart() {
+        telemetry.addData("AutoEndPos", Poses.AutoEnd);
+        telemetry.addData("CurrentPos", PedroComponent.follower().getPose());
+        telemetry.addData("Log", Poses.instanceId);
+        telemetry.update();
+
     }
 
     @Override
@@ -51,7 +60,7 @@ public class TuningOpmode extends NextFTCOpMode {
                     Gamepads.gamepad1().leftStickY(),
                     Gamepads.gamepad1().leftStickX(),
                     Gamepads.gamepad1().rightStickX().negate(),
-                    true
+                    false
             );
         }
         else {
@@ -59,7 +68,7 @@ public class TuningOpmode extends NextFTCOpMode {
                     Gamepads.gamepad1().leftStickY().negate(),
                     Gamepads.gamepad1().leftStickX().negate(),
                     Gamepads.gamepad1().rightStickX().negate(),
-                    true
+                    false
             );
         }
 

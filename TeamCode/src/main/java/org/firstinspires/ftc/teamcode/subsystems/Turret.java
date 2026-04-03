@@ -22,6 +22,7 @@ public class Turret implements Subsystem {
     private boolean EnableTracking = false;
     private double CalculateTurretPos(Pose CurrentGoalPos){
         Pose RobotPose = PedroComponent.follower().getPose();
+
         double dx = CurrentGoalPos.getX() - RobotPose.getX();
         double dy = CurrentGoalPos.getY() - RobotPose.getY();
         double rawDelta = Math.atan2(dy, dx) - (RobotPose.getHeading() + Math.PI);

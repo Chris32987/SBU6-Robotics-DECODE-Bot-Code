@@ -49,7 +49,7 @@ public class Shooter implements Subsystem {
 
     ControlSystem controller = ControlSystem.builder()
             .velPid(0.005,0,0)
-            .basicFF(0.00038,0,0.09)
+            .basicFF(0.00037,0,0.09)
             .build();
 
     public Command FlywheelOn = new InstantCommand(() -> spinFlywheel = true);
@@ -73,5 +73,7 @@ public class Shooter implements Subsystem {
         ActiveOpMode.telemetry().addData("Flywheel Speed", flywheelMotors.getVelocity() * -1);
         ActiveOpMode.telemetry().addData("Flyweel Target", TargetVelocity);
         ActiveOpMode.telemetry().addData("Hood Position", HoodServoRight.getPosition());
+        ActiveOpMode.telemetry().addData("Distance to Goal", distance);
+        ActiveOpMode.telemetry().addData("Goal Pose", Poses.Goal);
     }
 }
