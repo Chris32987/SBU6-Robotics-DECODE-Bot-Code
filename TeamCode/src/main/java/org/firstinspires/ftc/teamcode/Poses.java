@@ -22,10 +22,16 @@ public class Poses {
             Goal = new Pose(2,142);
             AutoEnd = new Pose (15,119.2,Math.toRadians(324));
         }
+
         else{
             CurrentAlliance = AllianceColor.RED;
             Goal = new Pose(139.5, 142);
             AutoEnd = new Pose (15,119.2,Math.toRadians(324)).mirror();
         }
     }
+    public static Pose AUTO_END_POSE = new Pose(17.5, 120, Math.toRadians(324));
+
+    public static double AUTO_END_X = 17.5;
+    public static double AUTO_END_Y = 120;
+    public static double AUTO_END_HEADING = Math.toRadians(324);
 }

@@ -41,6 +41,7 @@ public class MainTeleOp extends NextFTCOpMode {
 
     @Override public void onInit() {
         PedroComponent.follower().setPose(Poses.AutoEnd);
+        PedroComponent.follower().setPose(new Pose(Poses.AUTO_END_X, Poses.AUTO_END_Y, Poses.AUTO_END_HEADING));
         Turret.INSTANCE.TrackingOff.schedule();
         Turret.INSTANCE.SetTurretPosition(Poses.TurretEnd).schedule();
     }
@@ -77,30 +78,26 @@ public class MainTeleOp extends NextFTCOpMode {
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
 
         Gamepads.gamepad1().rightTrigger().greaterThan(0.05)
-                .whenBecomesTrue(new SequentialGroup(
-                        new ParallelGroup(
-                                Intake.INSTANCE.GateOpen,
-                                Shooter.INSTANCE.FlywheelOn
-                        ),
+                .whenBecomesTrue(Shooter.INSTANCE.FlywheelOn)
+                .whenBecomesFalse(new SequentialGroup(
+                        Turret.INSTANCE.TrackingOn,
                         new ParallelRaceGroup(
                                 new Delay(1),
                                 new WaitUntil(() -> Shooter.INSTANCE.AtSpeed)
                         ),
-                        Intake.INSTANCE.intakeSpin
-                ))
-                .whenBecomesFalse( new ParallelGroup(
+                        new ParallelGroup(
+                                Intake.INSTANCE.GateOpen,
+                                Intake.INSTANCE.intakeSpin
+                        ),
+                        new Delay(1),
                         Intake.INSTANCE.intakeOff,
+                        Intake.INSTANCE.GateClose,
                         Shooter.INSTANCE.FlywheelOff,
-                        Intake.INSTANCE.GateClose
-                ));
+                        Turret.INSTANCE.TrackingOff));
 
-        Gamepads.gamepad1().triangle()
-                .toggleOnBecomesTrue()
-                .whenBecomesTrue(Turret.INSTANCE.TrackingOn)
-                .whenBecomesFalse(Turret.INSTANCE.TrackingOff);
     }
     @Override public void onUpdate() {
-        driverControlled.setScalar(0.25);
+        driverControlled.setScalar(0.3);
 
         Pose robotPose = PedroComponent.follower().getPose();
         telemetry.addData("Robot X", robotPose.getX());
