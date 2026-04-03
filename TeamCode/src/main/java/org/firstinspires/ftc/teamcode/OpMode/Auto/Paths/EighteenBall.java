@@ -241,7 +241,8 @@ public abstract class EighteenBall extends NextFTCOpMode {
 
                 Shooter.INSTANCE.FlywheelOn,
                 new FollowPath(scoreFarSpike),
-                ShootArtifacts()
+                ShootArtifacts(),
+                Shooter.INSTANCE.FlywheelOff
 
 
         );

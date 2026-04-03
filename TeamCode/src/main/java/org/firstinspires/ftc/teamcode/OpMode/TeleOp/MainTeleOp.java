@@ -26,6 +26,8 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
 @TeleOp(name = "Main TeleOp")
+
+
 public class MainTeleOp extends NextFTCOpMode {
     public MainTeleOp() {
         addComponents(
@@ -38,11 +40,13 @@ public class MainTeleOp extends NextFTCOpMode {
     }
 
     private PedroDriverControlled driverControlled;
+    private double scalar = 0.5;
 
     @Override public void onInit() {
         PedroComponent.follower().setPose(Poses.AutoEnd);
         PedroComponent.follower().setPose(new Pose(Poses.AUTO_END_X, Poses.AUTO_END_Y, Poses.AUTO_END_HEADING));
         Turret.INSTANCE.TrackingOff.schedule();
+        Shooter.INSTANCE.FlywheelOff.schedule();
         Turret.INSTANCE.SetTurretPosition(Poses.TurretEnd).schedule();
     }
     @Override public void onWaitForStart() {
@@ -73,6 +77,15 @@ public class MainTeleOp extends NextFTCOpMode {
 
         driverControlled.schedule();
         //Turret.INSTANCE.TrackingOn.schedule();
+
+        Gamepads.gamepad1().rightBumper()
+                .whenBecomesTrue(() -> scalar = 0.2)
+                .whenBecomesFalse(() -> scalar = 0.5);
+
+        Gamepads.gamepad1().dpadDown()
+                        .whenBecomesTrue(Intake.INSTANCE.intakeReverse)
+                        .whenBecomesFalse(Intake.INSTANCE.intakeOff);
+
         Gamepads.gamepad1().leftTrigger().greaterThan(0.05)
                 .whenBecomesTrue(Intake.INSTANCE.intakeSpin)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
@@ -97,7 +110,7 @@ public class MainTeleOp extends NextFTCOpMode {
 
     }
     @Override public void onUpdate() {
-        driverControlled.setScalar(0.3);
+        driverControlled.setScalar(scalar);
 
         Pose robotPose = PedroComponent.follower().getPose();
         telemetry.addData("Robot X", robotPose.getX());
@@ -107,6 +120,4 @@ public class MainTeleOp extends NextFTCOpMode {
         telemetry.update(); // LOOK HERE
     }
     @Override public void onStop() { }
-
-
 }
