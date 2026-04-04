@@ -44,7 +44,7 @@ public class Turret implements Subsystem {
 
     public double GetTurretPosition() {return TurretMotor.getCurrentPosition(); }
     ControlSystem controller = ControlSystem.builder()
-            .posPid(0.016, 0, 0.0004)
+            .posPid(0.016, 0, 0.0008)
             .build();
 
     @Override
