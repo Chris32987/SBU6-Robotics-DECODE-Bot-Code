@@ -44,7 +44,7 @@ public abstract class EighteenBall extends NextFTCOpMode {
     private Pose ScorePreloadPose = new Pose(52.095, 93.356, Math.toRadians(-74));
 
     // middle spike
-    private Pose IntakeMiddleSpikeControl = new Pose(60.0,  50.0);
+    private Pose IntakeMiddleSpikeControl = new Pose(60.0,  65.0);
     private Pose IntakeMiddleSpikePose =  new Pose(9.136,  60.152);
     private Pose ScoreMiddleSpikePose = new Pose(60.031, 76.434, Math.toRadians(180));
 
