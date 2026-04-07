@@ -6,11 +6,17 @@ import dev.nextftc.control.KineticState;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
+import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.hardware.controllable.MotorGroup;
 import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.impl.ServoEx;
 import dev.nextftc.hardware.positionable.SetPosition;
+import com.pedropathing.geometry.Pose;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+
+import org.firstinspires.ftc.teamcode.Poses;
 
 @Configurable
 public class TuningShooter implements Subsystem {
@@ -61,17 +67,23 @@ public class TuningShooter implements Subsystem {
 
     @Override
     public void periodic() {
-        controller.setGoal(new KineticState(0, flywheelTarget, 0));
-        if (spinFlywheel) power = controller.calculate(flywheelMotors.getState().times(-1));
-        else power = 0;
 
-        hoodPosition = HoodServoRight.getPosition();
-
+        power = spinFlywheel ? controller.calculate(flywheelMotors.getState().times(-1)) : 0;
         flywheelMotors.setPower(power);
 
+
+        Pose robotPose = PedroComponent.follower().getPose();
+        double distance = robotPose.distanceFrom(Poses.Goal);
         ActiveOpMode.telemetry().addData("Flywheel Speed", flywheelMotors.getVelocity() * -1);
         ActiveOpMode.telemetry().addData("Flywheel Target", flywheelTarget);
         ActiveOpMode.telemetry().addData("Applied Power", power);
         ActiveOpMode.telemetry().addData("Hood Position", HoodServoRight.getPosition());
-    }
-}
+
+        TelemetryPacket packet = new TelemetryPacket();
+        packet.put("Flywheel Speed", flywheelMotors.getVelocity() * -1);
+        packet.put("Flywheel Target", flywheelTarget);
+        packet.put("Applied Power", power);
+        packet.put("Hood Position", HoodServoRight.getPosition());
+        packet.put("Distance to Goal", distance);
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
+}}

@@ -17,6 +17,8 @@ import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.hardware.controllable.MotorGroup;
 import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.impl.ServoEx;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
 public class Shooter implements Subsystem {
     public static final Shooter INSTANCE = new Shooter();
@@ -71,9 +73,18 @@ public class Shooter implements Subsystem {
         flywheelMotors.setPower(!spinFlywheel ? 0 : controller.calculate(flywheelMotors.getState().times(-1)));
 
         ActiveOpMode.telemetry().addData("Flywheel Speed", flywheelMotors.getVelocity() * -1);
-        ActiveOpMode.telemetry().addData("Flyweel Target", TargetVelocity);
+        ActiveOpMode.telemetry().addData("Flywheel Target", TargetVelocity);
         ActiveOpMode.telemetry().addData("Hood Position", HoodServoRight.getPosition());
         ActiveOpMode.telemetry().addData("Distance to Goal", distance);
         ActiveOpMode.telemetry().addData("Goal Pose", Poses.Goal);
-    }
-}
+
+        TelemetryPacket packet = new TelemetryPacket();
+        //PedroComponent.follower().telemetryDebug(packet);
+        packet.put("Flywheel Speed", flywheelMotors.getVelocity() * -1);
+        packet.put("Flywheel Target", TargetVelocity);
+        packet.put("Hood Position", HoodServoRight.getPosition());
+        packet.put("Distance to Goal", distance);
+        packet.put("At Speed", AtSpeed);
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
+
+    }}
