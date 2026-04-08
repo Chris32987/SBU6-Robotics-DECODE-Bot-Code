@@ -9,6 +9,7 @@ import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.impl.ServoEx;
 import dev.nextftc.hardware.positionable.SetPosition;
 import dev.nextftc.hardware.powerable.SetPower;
+import org.firstinspires.ftc.teamcode.Poses;
 import org.firstinspires.ftc.teamcode.Prism.Color;
 import org.firstinspires.ftc.teamcode.Prism.GoBildaPrismDriver;
 import org.firstinspires.ftc.teamcode.Prism.PrismAnimations;
@@ -22,36 +23,71 @@ public class Intake implements Subsystem {
     private final MotorEx IntakeMotor = new MotorEx("IntakeMotor").brakeMode();
     private final ServoEx GateServo = new ServoEx("GateServo");
 
-    public Command intakeSpin = new SetPower(IntakeMotor, 1).requires(IntakeMotor);
-    public Command intakeOff = new SetPower(IntakeMotor, 0.2).requires(IntakeMotor);
+    public Command intakeSpin    = new SetPower(IntakeMotor, 1).requires(IntakeMotor);
+    public Command intakeOff     = new SetPower(IntakeMotor, 0.2).requires(IntakeMotor);
     public Command intakeReverse = new SetPower(IntakeMotor, -1).requires(IntakeMotor);
-    public Command GateOpen = new SetPosition(GateServo, 0.65);
-    public Command GateClose = new SetPosition(GateServo, 1);
+    public Command GateOpen      = new SetPosition(GateServo, 0.65);
+    public Command GateClose     = new SetPosition(GateServo, 1);
 
     private DigitalChannel LaserLeft;
     private DigitalChannel LaserRight;
     private GoBildaPrismDriver leds;
 
     public static double INITIAL_WAIT_TIME = 0.3;
-    private static final double BLINK_DURATION_MS = 2000;
 
-    private boolean BallPresent = false;
+    private static final int    BLINK_PERIOD_MS = 400;
+    private static final int    BLINK_ON_MS     = 200;
+    private static final double TWO_BLINKS_MS   = 800;
+
+    private enum LedState {
+        OFF,
+        TWO_FLASHES,
+        SOLID
+    }
+
+    private boolean BallPresent     = false;
     private boolean CurrentlyTiming = false;
-    private boolean animationPlayed = false;
-    private boolean solidSet = false;
-    private final ElapsedTime Timer = new ElapsedTime();
+    private LedState ledState       = LedState.OFF;
+    private final ElapsedTime Timer      = new ElapsedTime();
     private final ElapsedTime blinkTimer = new ElapsedTime();
 
     public boolean HasThreeBalls = false;
 
+    private Color getAllianceColor() {
+        return Poses.CurrentAlliance == Poses.AllianceColor.BLUE ? Color.BLUE : Color.GREEN;
+    }
+
     @Override
     public void initialize() {
-        LaserLeft = ActiveOpMode.hardwareMap().get(DigitalChannel.class, "LaserLeft");
+        LaserLeft  = ActiveOpMode.hardwareMap().get(DigitalChannel.class, "LaserLeft");
         LaserRight = ActiveOpMode.hardwareMap().get(DigitalChannel.class, "LaserRight");
         LaserLeft.setMode(DigitalChannel.Mode.INPUT);
         LaserRight.setMode(DigitalChannel.Mode.INPUT);
         leds = ActiveOpMode.hardwareMap().get(GoBildaPrismDriver.class, "leds");
         leds.clearAllAnimations();
+    }
+
+    private void setLedState(LedState newState) {
+        if (newState == ledState) return;
+        ledState = newState;
+        leds.clearAllAnimations();
+        blinkTimer.reset();
+        switch (ledState) {
+            case TWO_FLASHES:
+                leds.insertAndUpdateAnimation(
+                        GoBildaPrismDriver.LayerHeight.LAYER_0,
+                        new PrismAnimations.Blink(getAllianceColor(), Color.TRANSPARENT, BLINK_PERIOD_MS, BLINK_ON_MS)
+                );
+                break;
+            case SOLID:
+                leds.insertAndUpdateAnimation(
+                        GoBildaPrismDriver.LayerHeight.LAYER_0,
+                        new PrismAnimations.Solid(getAllianceColor())
+                );
+                break;
+            case OFF:
+                break;
+        }
     }
 
     @Override
@@ -67,36 +103,25 @@ public class Intake implements Subsystem {
             }
         } else {
             CurrentlyTiming = false;
-            HasThreeBalls = false;
+            HasThreeBalls   = false;
         }
 
-        if (HasThreeBalls) {
-            if (!animationPlayed) {
-                leds.clearAllAnimations();
-                leds.insertAndUpdateAnimation(
-                        GoBildaPrismDriver.LayerHeight.LAYER_0,
-                        new PrismAnimations.Blink(Color.GREEN, Color.TRANSPARENT, 1000, 500)
-                );
-                blinkTimer.reset();
-                animationPlayed = true;
-            } else if (!solidSet && blinkTimer.milliseconds() > BLINK_DURATION_MS) {
-                leds.clearAllAnimations();
-                leds.insertAndUpdateAnimation(
-                        GoBildaPrismDriver.LayerHeight.LAYER_0,
-                        new PrismAnimations.Solid(Color.GREEN)
-                );
-                solidSet = true;
-            }
-        } else {
-            if (animationPlayed) {
-                leds.clearAllAnimations();
-                animationPlayed = false;
-                solidSet = false;
-            }
+        switch (ledState) {
+            case OFF:
+                if (HasThreeBalls) setLedState(LedState.TWO_FLASHES);
+                break;
+            case TWO_FLASHES:
+                if (!HasThreeBalls)                                  setLedState(LedState.OFF);
+                else if (blinkTimer.milliseconds() > TWO_BLINKS_MS) setLedState(LedState.SOLID);
+                break;
+            case SOLID:
+                if (!HasThreeBalls) setLedState(LedState.OFF);
+                break;
         }
 
-        ActiveOpMode.telemetry().addData("BallPresent", BallPresent);
+        ActiveOpMode.telemetry().addData("BallPresent",  BallPresent);
         ActiveOpMode.telemetry().addData("HasThreeBalls", HasThreeBalls);
-        ActiveOpMode.telemetry().addData("Timer", Timer.seconds());
+        ActiveOpMode.telemetry().addData("LedState",     ledState);
+        ActiveOpMode.telemetry().addData("Timer",        Timer.seconds());
     }
 }
