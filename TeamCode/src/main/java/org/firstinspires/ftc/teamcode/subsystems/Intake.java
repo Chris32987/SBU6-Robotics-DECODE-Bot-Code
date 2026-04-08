@@ -9,6 +9,9 @@ import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.impl.ServoEx;
 import dev.nextftc.hardware.positionable.SetPosition;
 import dev.nextftc.hardware.powerable.SetPower;
+import org.firstinspires.ftc.teamcode.Prism.Color;
+import org.firstinspires.ftc.teamcode.Prism.GoBildaPrismDriver;
+import org.firstinspires.ftc.teamcode.Prism.PrismAnimations;
 
 public class Intake implements Subsystem {
     public static final Intake INSTANCE = new Intake();
@@ -27,12 +30,17 @@ public class Intake implements Subsystem {
 
     private DigitalChannel LaserLeft;
     private DigitalChannel LaserRight;
+    private GoBildaPrismDriver leds;
 
     public static double INITIAL_WAIT_TIME = 0.3;
+    private static final double BLINK_DURATION_MS = 2000;
 
     private boolean BallPresent = false;
     private boolean CurrentlyTiming = false;
+    private boolean animationPlayed = false;
+    private boolean solidSet = false;
     private final ElapsedTime Timer = new ElapsedTime();
+    private final ElapsedTime blinkTimer = new ElapsedTime();
 
     public boolean HasThreeBalls = false;
 
@@ -42,6 +50,8 @@ public class Intake implements Subsystem {
         LaserRight = ActiveOpMode.hardwareMap().get(DigitalChannel.class, "LaserRight");
         LaserLeft.setMode(DigitalChannel.Mode.INPUT);
         LaserRight.setMode(DigitalChannel.Mode.INPUT);
+        leds = ActiveOpMode.hardwareMap().get(GoBildaPrismDriver.class, "leds");
+        leds.clearAllAnimations();
     }
 
     @Override
@@ -58,6 +68,31 @@ public class Intake implements Subsystem {
         } else {
             CurrentlyTiming = false;
             HasThreeBalls = false;
+        }
+
+        if (HasThreeBalls) {
+            if (!animationPlayed) {
+                leds.clearAllAnimations();
+                leds.insertAndUpdateAnimation(
+                        GoBildaPrismDriver.LayerHeight.LAYER_0,
+                        new PrismAnimations.Blink(Color.GREEN, Color.TRANSPARENT, 1000, 500)
+                );
+                blinkTimer.reset();
+                animationPlayed = true;
+            } else if (!solidSet && blinkTimer.milliseconds() > BLINK_DURATION_MS) {
+                leds.clearAllAnimations();
+                leds.insertAndUpdateAnimation(
+                        GoBildaPrismDriver.LayerHeight.LAYER_0,
+                        new PrismAnimations.Solid(Color.GREEN)
+                );
+                solidSet = true;
+            }
+        } else {
+            if (animationPlayed) {
+                leds.clearAllAnimations();
+                animationPlayed = false;
+                solidSet = false;
+            }
         }
 
         ActiveOpMode.telemetry().addData("BallPresent", BallPresent);
