@@ -65,11 +65,11 @@ public abstract class EighteenBall extends NextFTCOpMode {
     private Pose ScoreGateIntake2Pose = new Pose(60.939, 76.434, Math.toRadians(0));
 
     // close spike
-    private Pose IntakeCloseSpikePose = new Pose(14.831, 83.695, Math.toRadians(0));
+    private Pose IntakeCloseSpikePose = new Pose(14.831, 83.695, Math.toRadians(0)); //add 10 to y if overshooting
     private Pose ScoreCloseSpikePose = new Pose(60.671, 76.502, Math.toRadians(0));
 
     // far spike
-    private Pose ApproachFarSpikeControl = new Pose(60.529, 32.102);
+    private Pose ApproachFarSpikeControl = new Pose(60.529, 42.102);
     private Pose IntakeFarSpikePose = new Pose(13.424, 35.634, Math.toRadians(0));
     private Pose ScoreFarSpikePose = new Pose(55.614, 118.512, Math.toRadians(0));
 
