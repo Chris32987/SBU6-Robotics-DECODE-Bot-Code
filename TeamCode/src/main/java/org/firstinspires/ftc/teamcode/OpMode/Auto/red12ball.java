@@ -7,5 +7,5 @@ import org.firstinspires.ftc.teamcode.Poses;
 
 @Autonomous(name="12 Ball Autonomous - RED")
 public class red12ball extends TwelveBall {
-    public red12ball() {super(Poses.AllianceColor.BLUE); }
+    public red12ball() {super(Poses.AllianceColor.RED); }
 }
