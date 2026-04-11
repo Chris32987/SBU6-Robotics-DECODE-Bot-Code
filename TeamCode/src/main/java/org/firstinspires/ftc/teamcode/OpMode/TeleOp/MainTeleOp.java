@@ -15,6 +15,7 @@ import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.ParallelRaceGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
 //import dev.nextftc.extensions.pedro.PedroComponent;
@@ -106,6 +107,9 @@ public class MainTeleOp extends NextFTCOpMode {
                         Intake.INSTANCE.GateClose,
                         Shooter.INSTANCE.FlywheelOff,
                         Turret.INSTANCE.TrackingOff));
+
+        Gamepads.gamepad1().triangle()
+                .whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().setPose(Poses.HumanPlayerZone)));
 
     }
     @Override public void onUpdate() {

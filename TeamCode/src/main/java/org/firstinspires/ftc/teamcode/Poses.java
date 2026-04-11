@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.pedropathing.geometry.Pose;
 
+import dev.nextftc.extensions.pedro.PedroComponent;
+
 public class Poses {
     public enum AllianceColor {
         BLUE, RED
@@ -10,7 +12,7 @@ public class Poses {
     public static AllianceColor CurrentAlliance = AllianceColor.BLUE;
     public static Pose Goal = new Pose(2,142);
     public static Pose AutoEnd = new Pose(15,119.2,Math.toRadians(324));
-
+    public static Pose  HumanPlayerZone = new Pose (136.8125, 6.09375,  Math.toRadians(180));
     public static double TurretEnd = -391;
 
     public static final long instanceId = System.nanoTime();
@@ -21,12 +23,14 @@ public class Poses {
             CurrentAlliance = AllianceColor.BLUE;
             Goal = new Pose(2,142);
             AutoEnd = new Pose (15,119.2,Math.toRadians(324));
+            HumanPlayerZone = new Pose (136.8125, 6.09375,  Math.toRadians(180));
         }
 
         else{
             CurrentAlliance = AllianceColor.RED;
             Goal = new Pose(139.5, 142);
             AutoEnd = new Pose (15,119.2,Math.toRadians(324)).mirror();
+            HumanPlayerZone = new Pose (136.8125, 6.09375, Math.toRadians(180)).mirror();
         }
     }
     public static Pose AUTO_END_POSE = new Pose(17.5, 120, Math.toRadians(324));
