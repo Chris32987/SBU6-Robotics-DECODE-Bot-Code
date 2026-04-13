@@ -190,28 +190,6 @@ public abstract class FifteenBall extends NextFTCOpMode {
                 ShootArtifacts(),
                 Shooter.INSTANCE.FlywheelOff,
 
-                // gate intake run 1
-                Intake.INSTANCE.intakeSpin,
-                new FollowPath(approachGateIntake1),
-                new Delay(1.5),
-                Intake.INSTANCE.intakeOff,
-
-                Shooter.INSTANCE.FlywheelOn,
-                new FollowPath(scoreGateIntake1),
-                ShootArtifacts(),
-                Shooter.INSTANCE.FlywheelOff,
-
-                // gate intake run 1
-                Intake.INSTANCE.intakeSpin,
-                new FollowPath(approachGateIntake1),
-                new Delay(1.5),
-                Intake.INSTANCE.intakeOff,
-
-                Shooter.INSTANCE.FlywheelOn,
-                new FollowPath(scoreGateIntake1),
-                ShootArtifacts(),
-                Shooter.INSTANCE.FlywheelOff,
-
                 // close spike
                 Intake.INSTANCE.intakeSpin,
                 new FollowPath(intakeCloseSpike),
@@ -220,9 +198,33 @@ public abstract class FifteenBall extends NextFTCOpMode {
                 Shooter.INSTANCE.FlywheelOn,
                 new FollowPath(scoreCloseSpike),
                 ShootArtifacts(),
-                Shooter.INSTANCE.FlywheelOff
+                Shooter.INSTANCE.FlywheelOff,
 
-        );
+                // gate intake run 1
+                Intake.INSTANCE.intakeSpin,
+                new FollowPath(approachGateIntake1),
+                new Delay(1.5),
+                Intake.INSTANCE.intakeOff,
+
+                Shooter.INSTANCE.FlywheelOn,
+                new FollowPath(scoreGateIntake1),
+                ShootArtifacts(),
+                Shooter.INSTANCE.FlywheelOff,
+
+                // gate intake run 1
+                Intake.INSTANCE.intakeSpin,
+                new FollowPath(approachGateIntake1),
+                new Delay(1.5),
+                Intake.INSTANCE.intakeOff,
+
+                Shooter.INSTANCE.FlywheelOn,
+                new FollowPath(scoreGateIntake1),
+                ShootArtifacts(),
+                Shooter.INSTANCE.FlywheelOff);
+
+
+
+
     }
 
     @Override
