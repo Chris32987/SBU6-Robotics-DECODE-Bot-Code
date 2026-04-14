@@ -23,14 +23,14 @@ public class Poses {
             CurrentAlliance = AllianceColor.BLUE;
             Goal = new Pose(2,142);
             AutoEnd = new Pose (15,119.2,Math.toRadians(324));
-            HumanPlayerZone = new Pose (136.8125, 6.09375,  Math.toRadians(180));
+            HumanPlayerZone = new Pose (136.8125, 6.09375,  Math.toRadians(180)).mirror();
         }
 
         else{
             CurrentAlliance = AllianceColor.RED;
             Goal = new Pose(139.5, 142);
             AutoEnd = new Pose (15,119.2,Math.toRadians(324)).mirror();
-            HumanPlayerZone = new Pose (136.8125, 6.09375, Math.toRadians(180)).mirror();
+            HumanPlayerZone = new Pose (136.8125, 6.09375, Math.toRadians(180));
         }
     }
     public static Pose AUTO_END_POSE = new Pose(17.5, 120, Math.toRadians(324));
