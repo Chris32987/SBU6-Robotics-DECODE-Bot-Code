@@ -44,6 +44,8 @@ public class MainTeleOp extends NextFTCOpMode {
     private double scalar = 0.5;
 
     @Override public void onInit() {
+        PedroComponent.follower().setPose(Poses.AutoEnd);
+        PedroComponent.follower().setPose(new Pose(Poses.AUTO_END_X, Poses.AUTO_END_Y, Poses.AUTO_END_HEADING));
         Turret.INSTANCE.TrackingOff.schedule();
         Shooter.INSTANCE.FlywheelOff.schedule();
         Turret.INSTANCE.SetTurretPosition(Poses.TurretEnd).schedule();
