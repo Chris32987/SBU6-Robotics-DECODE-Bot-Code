@@ -41,7 +41,7 @@ public class MainTeleOp extends NextFTCOpMode {
     }
 
     private PedroDriverControlled driverControlled;
-    private double scalar = 0.5;
+    private double scalar = 0.7;
 
     @Override public void onInit() {
         PedroComponent.follower().setPose(new Pose(Poses.AUTO_END_X, Poses.AUTO_END_Y, Poses.AUTO_END_HEADING));
@@ -80,7 +80,7 @@ public class MainTeleOp extends NextFTCOpMode {
 
         Gamepads.gamepad1().rightBumper()
                 .whenBecomesTrue(() -> scalar = 0.2)
-                .whenBecomesFalse(() -> scalar = 0.5);
+                .whenBecomesFalse(() -> scalar = 0.7);
 
         Gamepads.gamepad1().dpadDown()
                         .whenBecomesTrue(Intake.INSTANCE.intakeReverse)
