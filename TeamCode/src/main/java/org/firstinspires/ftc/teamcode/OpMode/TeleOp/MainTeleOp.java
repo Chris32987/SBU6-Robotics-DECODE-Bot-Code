@@ -91,9 +91,11 @@ public class MainTeleOp extends NextFTCOpMode {
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
 
         Gamepads.gamepad1().rightTrigger().greaterThan(0.05)
-                .whenBecomesTrue(Shooter.INSTANCE.FlywheelOn)
+                .whenBecomesTrue(new ParallelGroup(
+                        Shooter.INSTANCE.FlywheelOn,
+                        Turret.INSTANCE.TrackingOn
+                ))
                 .whenBecomesFalse(new SequentialGroup(
-                        Turret.INSTANCE.TrackingOn,
                         new ParallelRaceGroup(
                                 new Delay(1),
                                 new WaitUntil(() -> Shooter.INSTANCE.AtSpeed)
@@ -107,7 +109,8 @@ public class MainTeleOp extends NextFTCOpMode {
                         Intake.INSTANCE.intakeOff,
                         Intake.INSTANCE.GateClose,
                         Shooter.INSTANCE.FlywheelOff,
-                        Turret.INSTANCE.TrackingOff));
+                        Turret.INSTANCE.TrackingOff
+                ));
 
         Gamepads.gamepad1().triangle()
                 .whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().setPose(Poses.HumanPlayerZone)));
