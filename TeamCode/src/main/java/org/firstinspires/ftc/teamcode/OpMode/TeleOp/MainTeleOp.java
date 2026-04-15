@@ -48,6 +48,10 @@ public class MainTeleOp extends NextFTCOpMode {
         Turret.INSTANCE.TrackingOff.schedule();
         Shooter.INSTANCE.FlywheelOff.schedule();
         Turret.INSTANCE.SetTurretPosition(Poses.TurretEnd).schedule();
+
+        telemetry.addData("PoseX", Poses.AUTO_END_POSE.getX());
+        telemetry.addData("PoseY", Poses.AUTO_END_POSE.getY());
+        telemetry.addData("PoseH", Poses.AUTO_END_POSE.getHeading());
     }
     @Override public void onWaitForStart() {
         PedroComponent.follower().setStartingPose(new Pose(Poses.AUTO_END_X, Poses.AUTO_END_Y, Poses.AUTO_END_HEADING));
@@ -118,7 +122,7 @@ public class MainTeleOp extends NextFTCOpMode {
     }
     @Override public void onUpdate() {
         driverControlled.setScalar(scalar);
-
+        PedroComponent.follower().update();
         Pose robotPose = PedroComponent.follower().getPose();
         telemetry.addData("Robot X", robotPose.getX());
         telemetry.addData("Robot Y", robotPose.getY());

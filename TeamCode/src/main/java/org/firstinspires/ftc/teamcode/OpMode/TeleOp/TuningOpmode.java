@@ -37,14 +37,14 @@ public class TuningOpmode extends NextFTCOpMode {
     public static double hoodPos = 0.4;
 
     @Override public void onInit() {
-        PedroComponent.follower().setPose(Poses.AutoEnd);
+        PedroComponent.follower().setPose(Poses.AUTO_END_POSE);
         Turret.INSTANCE.TrackingOff.schedule();
         Turret.INSTANCE.SetTurretPosition(Poses.TurretEnd).schedule();
     }
     @Override
 
     public void onWaitForStart() {
-        telemetry.addData("AutoEndPos", Poses.AutoEnd);
+        telemetry.addData("AutoEndPos", Poses.AUTO_END_POSE);
         telemetry.addData("CurrentPos", PedroComponent.follower().getPose());
         telemetry.addData("Log", Poses.instanceId);
         telemetry.update();
