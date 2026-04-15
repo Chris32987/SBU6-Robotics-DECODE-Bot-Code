@@ -18,7 +18,7 @@ public abstract class TeleStart extends NextFTCOpMode {
         this.alliance = alliance;
     }
 
-    private Pose StartPose = new Pose(15.2, 119, Math.toRadians(90));
+    private Pose StartPose = new Pose(15.2, 119, Math.toRadians(324));
 
     private void InitPoses() {
         if (alliance == Poses.AllianceColor.RED) {
