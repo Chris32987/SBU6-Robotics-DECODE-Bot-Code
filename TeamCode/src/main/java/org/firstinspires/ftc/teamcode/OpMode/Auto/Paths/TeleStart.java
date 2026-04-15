@@ -4,6 +4,7 @@ import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.Poses;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.Turret;
 
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
@@ -31,6 +32,8 @@ public abstract class TeleStart extends NextFTCOpMode {
         Poses.SetAlliance(alliance);
         InitPoses();
         PedroComponent.follower().setStartingPose(StartPose);
+        Turret.INSTANCE.SetTurretPosition(0);
+        Poses.TurretEnd = 0;
     }
 
     @Override
