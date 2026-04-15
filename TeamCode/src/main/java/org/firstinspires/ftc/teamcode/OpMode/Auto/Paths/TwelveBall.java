@@ -168,7 +168,7 @@ public abstract class TwelveBall extends NextFTCOpMode {
     @Override
     public void onUpdate() {
         Pose robotPose = PedroComponent.follower().getPose();
-        if (robotPose.distanceFrom(Poses.AutoEnd) < 5) {
+        if (robotPose.distanceFrom(Poses.AUTO_END_POSE) < 5) {
             Poses.AUTO_END_POSE = robotPose;
             Poses.AUTO_END_X = robotPose.getX();
             Poses.AUTO_END_Y = robotPose.getY();
@@ -180,7 +180,7 @@ public abstract class TwelveBall extends NextFTCOpMode {
         telemetry.addData("Robot Heading", robotPose.getHeading());
         telemetry.addData("Alliance", Poses.CurrentAlliance);
         telemetry.addData("Goal Pose", Poses.Goal);
-        telemetry.addData("AutoEndThink", Poses.AutoEnd);
+        telemetry.addData("AutoEndThink", Poses.AUTO_END_POSE);
         telemetry.update();
         drawOnlyCurrent();
     }

@@ -11,7 +11,7 @@ public class Poses {
 
     public static AllianceColor CurrentAlliance = AllianceColor.BLUE;
     public static Pose Goal = new Pose(0,144);
-    public static Pose AutoEnd = new Pose(15.2,119,Math.toRadians(324));
+    //public static Pose AutoEnd = new Pose(15.2,119,Math.toRadians(324));
     public static Pose  HumanPlayerZone = new Pose (136.8125, 6.09375,  Math.toRadians(0));
     public static double TurretEnd = -391;
 
@@ -22,7 +22,7 @@ public class Poses {
         if(alliance == AllianceColor.BLUE){
             CurrentAlliance = AllianceColor.BLUE;
             Goal = new Pose(0,144);
-            AutoEnd = new Pose (15.2,119,Math.toRadians(324));
+            AUTO_END_POSE = new Pose (15.2,119,Math.toRadians(324));
             HumanPlayerZone = new Pose (136.8125, 6.09375,  Math.toRadians(180));
 
         }
@@ -30,7 +30,7 @@ public class Poses {
         else{
             CurrentAlliance = AllianceColor.RED;
             Goal = new Pose(0,144).mirror();
-            AutoEnd = new Pose (15.2,119,Math.toRadians(324)).mirror();
+            AUTO_END_POSE = new Pose (15.2,119,Math.toRadians(324)).mirror();
             HumanPlayerZone = new Pose (136.8125, 6.09375, Math.toRadians(180)).mirror();
         }
     }

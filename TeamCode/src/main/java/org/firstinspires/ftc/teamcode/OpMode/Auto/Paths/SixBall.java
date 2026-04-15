@@ -123,8 +123,8 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
     @Override
     public void onUpdate() {
         Pose robotPose = PedroComponent.follower().getPose();
-        if (robotPose.distanceFrom(Poses.AutoEnd) < 5) {
-            Poses.AutoEnd = new Pose(robotPose.getX(), robotPose.getY(), robotPose.getHeading());
+        if (robotPose.distanceFrom(Poses.AUTO_END_POSE) < 5) {
+            Poses.AUTO_END_POSE = new Pose(robotPose.getX(), robotPose.getY(), robotPose.getHeading());
             Poses.AUTO_END_X = robotPose.getX();
             Poses.AUTO_END_Y = robotPose.getY();
             Poses.AUTO_END_HEADING = robotPose.getHeading();
@@ -137,7 +137,6 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
         telemetry.addData("Robot Heading", robotPose.getHeading());
         telemetry.addData("Alliance", Poses.CurrentAlliance);
         telemetry.addData("Goal Pose", Poses.Goal);
-        telemetry.addData("AutoEndThink", Poses.AutoEnd);
         telemetry.addData("Log", Poses.instanceId);
         telemetry.update();
         drawOnlyCurrent();
