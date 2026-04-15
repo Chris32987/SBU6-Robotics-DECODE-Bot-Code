@@ -54,7 +54,7 @@ public class MainTeleOp extends NextFTCOpMode {
         telemetry.addData("PoseH", Poses.AUTO_END_POSE.getHeading());
     }
     @Override public void onWaitForStart() {
-        PedroComponent.follower().setStartingPose(new Pose(Poses.AUTO_END_X, Poses.AUTO_END_Y, Poses.AUTO_END_HEADING));
+
         telemetry.addData("CurrentPos", PedroComponent.follower().getPose());
         telemetry.addData("Log", Poses.instanceId);
         telemetry.update();

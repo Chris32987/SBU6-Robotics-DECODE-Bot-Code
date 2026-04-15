@@ -252,7 +252,6 @@ public abstract class FifteenBall extends NextFTCOpMode {
         }
 
         Poses.TurretEnd = Turret.INSTANCE.GetTurretPosition();
-
         telemetry.addData("Robot X", robotPose.getX());
         telemetry.addData("Robot Y", robotPose.getY());
         telemetry.addData("Robot Heading", robotPose.getHeading());
