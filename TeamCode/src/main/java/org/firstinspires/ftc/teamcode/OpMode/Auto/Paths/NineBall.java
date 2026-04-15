@@ -145,12 +145,15 @@ public abstract class NineBall extends NextFTCOpMode {
     @Override
     public void onUpdate() {
         Pose robotPose = PedroComponent.follower().getPose();
-        Poses.AUTO_END_POSE = robotPose;
-        Poses.AUTO_END_X = robotPose.getX();
-        Poses.AUTO_END_Y = robotPose.getY();
-        Poses.AUTO_END_HEADING = robotPose.getHeading();
+        if (robotPose.distanceFrom(Poses.AutoEnd) < 5) {
+            Poses.AUTO_END_POSE = robotPose;
+            Poses.AUTO_END_X = robotPose.getX();
+            Poses.AUTO_END_Y = robotPose.getY();
+            Poses.AUTO_END_HEADING = robotPose.getHeading();
+        }
 
         Poses.TurretEnd = Turret.INSTANCE.GetTurretPosition();
+
         telemetry.addData("Robot X", robotPose.getX());
         telemetry.addData("Robot Y", robotPose.getY());
         telemetry.addData("Robot Heading", robotPose.getHeading());

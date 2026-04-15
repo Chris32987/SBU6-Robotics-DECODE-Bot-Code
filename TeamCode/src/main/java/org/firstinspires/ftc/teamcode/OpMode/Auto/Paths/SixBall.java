@@ -123,8 +123,15 @@ public abstract class SixBall extends NextFTCOpMode { // constant over every aut
     @Override
     public void onUpdate() {
         Pose robotPose = PedroComponent.follower().getPose();
-        Poses.AutoEnd = new Pose(robotPose.getX(), robotPose.getY(), robotPose.getHeading());
+        if (robotPose.distanceFrom(Poses.AutoEnd) < 5) {
+            Poses.AutoEnd = new Pose(robotPose.getX(), robotPose.getY(), robotPose.getHeading());
+            Poses.AUTO_END_X = robotPose.getX();
+            Poses.AUTO_END_Y = robotPose.getY();
+            Poses.AUTO_END_HEADING = robotPose.getHeading();
+        }
+
         Poses.TurretEnd = Turret.INSTANCE.GetTurretPosition();
+
         telemetry.addData("Robot X", robotPose.getX());
         telemetry.addData("Robot Y", robotPose.getY());
         telemetry.addData("Robot Heading", robotPose.getHeading());
