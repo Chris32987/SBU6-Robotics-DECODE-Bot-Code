@@ -23,7 +23,7 @@ public class Poses {
             CurrentAlliance = AllianceColor.BLUE;
             Goal = new Pose(2,139.5);
             AUTO_END_POSE = new Pose (15.2,119,Math.toRadians(324));
-            HumanPlayerZone = new Pose (136.8125, 6.09375,  Math.toRadians(180));
+            HumanPlayerZone = new Pose (136.8125, 6.09375,  Math.toRadians(180)); // make zero if not working
 
         }
 

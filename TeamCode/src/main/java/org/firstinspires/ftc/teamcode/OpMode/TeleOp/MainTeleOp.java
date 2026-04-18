@@ -48,7 +48,7 @@ public class MainTeleOp extends NextFTCOpMode {
         PedroComponent.follower().setPose(new Pose(Poses.AUTO_END_X, Poses.AUTO_END_Y, Poses.AUTO_END_HEADING));
         Turret.INSTANCE.TrackingOff.schedule();
         Shooter.INSTANCE.FlywheelOff.schedule();
-        Turret.INSTANCE.SetTurretPosition(Poses.TurretEnd).schedule();
+        //Turret.INSTANCE.SetTurretPosition(Poses.TurretEnd).schedule(); removed and now turret seems more accurate
 
         telemetry.addData("PoseX", Poses.AUTO_END_POSE.getX());
         telemetry.addData("PoseY", Poses.AUTO_END_POSE.getY());
