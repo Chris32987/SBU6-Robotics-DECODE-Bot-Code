@@ -73,6 +73,10 @@ public abstract class FifteenBall extends NextFTCOpMode {
     private Pose IntakeFarSpikePose = new Pose(13.424, 35.634, Math.toRadians(0));
     private Pose ScoreFarSpikePose = new Pose(55.614, 118.512, Math.toRadians(0));
 
+    // leave
+
+    private Pose LeavePose = new Pose(30,85, Math.toRadians(0));
+
     private void InitPoses() {
         if (alliance == Poses.AllianceColor.RED) {
             StartPose = StartPose.mirror();
@@ -97,6 +101,7 @@ public abstract class FifteenBall extends NextFTCOpMode {
             ApproachFarSpikeControl = ApproachFarSpikeControl.mirror();
             IntakeFarSpikePose = IntakeFarSpikePose.mirror();
             ScoreFarSpikePose = ScoreFarSpikePose.mirror();
+            LeavePose = LeavePose.mirror();
         }
     }
 
@@ -105,7 +110,7 @@ public abstract class FifteenBall extends NextFTCOpMode {
     private PathChain approachGateIntake1, gateIntake1, scoreGateIntake1;
     private PathChain approachGateIntake2, gateIntake2, scoreGateIntake2;
     private PathChain intakeCloseSpike, scoreCloseSpike;
-
+    private PathChain leave;
 
     private void BuildPaths() {
         // drive to preload score position
@@ -147,6 +152,13 @@ public abstract class FifteenBall extends NextFTCOpMode {
         // drive back to score the close spike
         scoreCloseSpike = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierLine(IntakeCloseSpikePose, ScoreCloseSpikePose))
+                .setTangentHeadingInterpolation()
+                .build();
+
+        // leave
+
+        leave = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(ScoreCloseSpikePose, LeavePose))
                 .setTangentHeadingInterpolation()
                 .build();
     }
@@ -220,7 +232,12 @@ public abstract class FifteenBall extends NextFTCOpMode {
                 Shooter.INSTANCE.FlywheelOn,
                 new FollowPath(scoreGateIntake1),
                 ShootArtifacts(),
-                Shooter.INSTANCE.FlywheelOff);
+                Shooter.INSTANCE.FlywheelOff,
+
+                //leave
+
+                new FollowPath(leave));
+
 
 
 
