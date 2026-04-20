@@ -173,7 +173,7 @@ public abstract class FifteenBall extends NextFTCOpMode {
                         new FollowPath(scorePreload),
                         Shooter.INSTANCE.FlywheelOn,
                         new SequentialGroup(
-                                new Delay(0.4),
+                                new Delay(0.8),
                                 Turret.INSTANCE.TrackingOn
                         )
                 ),
