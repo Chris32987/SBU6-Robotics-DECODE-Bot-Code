@@ -49,7 +49,7 @@ public abstract class FifteenBall extends NextFTCOpMode {
     private Pose ScoreMiddleSpikePose = new Pose(60.031, 76.434, Math.toRadians(180));
 
     // gate intake run 1
-    private Pose ApproachGateIntake1Control = new Pose(2.559, 73.856);
+    private Pose ApproachGateIntake1Control = new Pose(0, 73.856);
     private Pose ApproachGateIntake1Control2 = new Pose(52, 57.23);
     private Pose ApproachGateIntake1Pose = new Pose(40, 69.732, Math.toRadians(90));
     private Pose GateIntake1Control = new Pose(14.510, 60.203);
@@ -57,7 +57,7 @@ public abstract class FifteenBall extends NextFTCOpMode {
     private Pose ScoreGateIntake1Pose = new Pose(61.939, 110.434, Math.toRadians(0)); //changed score pose to allow for LEAVE points
 
     // gate intake run 2
-    private Pose ApproachGateIntake2Control = new Pose(2.559, 73.856);
+    private Pose ApproachGateIntake2Control = new Pose(0, 73.856);
     private Pose ApproachGateIntake2Control2 = new Pose(24.817, 53.331);
     private Pose ApproachGateIntake2Pose = new Pose(40, 69.732, Math.toRadians(180));
     private Pose GateIntake2Control = new Pose(14.510, 60.203);
