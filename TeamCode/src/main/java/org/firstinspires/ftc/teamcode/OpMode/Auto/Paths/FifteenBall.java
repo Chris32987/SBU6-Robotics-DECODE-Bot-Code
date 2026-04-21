@@ -195,7 +195,7 @@ public abstract class FifteenBall extends NextFTCOpMode {
                 // middle spike
                 Intake.INSTANCE.intakeSpin,
                 new FollowPath(intakeMiddleSpike),
-                Intake.INSTANCE.intakeOff,
+
 
                 Shooter.INSTANCE.FlywheelOn,
                 new FollowPath(scoreMiddleSpike),
@@ -205,7 +205,7 @@ public abstract class FifteenBall extends NextFTCOpMode {
                 // close spike
                 Intake.INSTANCE.intakeSpin,
                 new FollowPath(intakeCloseSpike),
-                Intake.INSTANCE.intakeOff,
+
 
                 Shooter.INSTANCE.FlywheelOn,
                 new FollowPath(scoreCloseSpike),
@@ -216,7 +216,7 @@ public abstract class FifteenBall extends NextFTCOpMode {
                 Intake.INSTANCE.intakeSpin,
                 new FollowPath(approachGateIntake1),
                 new Delay(1.5),
-                Intake.INSTANCE.intakeOff,
+
 
                 Shooter.INSTANCE.FlywheelOn,
                 new FollowPath(scoreGateIntake1),
@@ -227,12 +227,13 @@ public abstract class FifteenBall extends NextFTCOpMode {
                 Intake.INSTANCE.intakeSpin,
                 new FollowPath(approachGateIntake1),
                 new Delay(1.5),
-                Intake.INSTANCE.intakeOff,
+
 
                 Shooter.INSTANCE.FlywheelOn,
                 new FollowPath(scoreGateIntake1),
                 ShootArtifacts(),
                 Shooter.INSTANCE.FlywheelOff,
+                Intake.INSTANCE.intakeOff,
 
                 //leave
 
